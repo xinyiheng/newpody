@@ -104,30 +104,38 @@ class PodcastGenerator:
     def update_podcast_index(self, podcast_data):
         """更新播客索引文件"""
         try:
-            # 读取现有索引
-            if os.path.exists(self.index_file):
-                with open(self.index_file, 'r', encoding='utf-8') as f:
-                    index = json.load(f)
-            else:
+            print(f"\n正在更新索引文件: {self.index_file}")
+            
+            # 从 gh-pages 分支获取现有索引
+            index_url = f"https://raw.githubusercontent.com/xinyiheng/newpody/gh-pages/podcast_index.json"
+            try:
+                response = requests.get(index_url)
+                if response.status_code == 200:
+                    index = response.json()
+                    print(f"成功从 gh-pages 获取现有索引，包含 {len(index['podcasts'])} 个播客")
+                else:
+                    print("无法获取现有索引，创建新索引")
+                    index = {'podcasts': []}
+            except Exception as e:
+                print(f"获取现有索引失败: {e}")
                 index = {'podcasts': []}
 
-            # 添加新播客信息
+            # 添加新播客信息到列表开头
             index['podcasts'].insert(0, podcast_data)
             
-            # 只保留最近30期
+            # 只保留最近50期
             index['podcasts'] = index['podcasts'][:50]
             
             # 保存更新后的索引
             with open(self.index_file, 'w', encoding='utf-8') as f:
                 json.dump(index, f, ensure_ascii=False, indent=2)
             
-            # 添加调试信息
-            print(f"\n索引文件已更新: {self.index_file}")
-            print(f"当前索引包含 {len(index['podcasts'])} 个播客")
-            print(f"最新播客信息: {podcast_data}")
+            print(f"索引文件已更新，现在包含 {len(index['podcasts'])} 个播客")
                 
         except Exception as e:
             print(f"更新索引文件失败: {e}")
+            import traceback
+            print(traceback.format_exc())
 
     async def generate_broadcast_script(self, summaries: List[Dict]) -> str:
         """生成单人播报稿"""
