@@ -1,12 +1,20 @@
 {
   "podcasts": [
     {
-      "id": "20250227_052625",
+      "id": "20250227_053622",
       "date": "2025-02-27",
       "title": "出版电台播报 2025年02月27日",
-      "highlight": "探索《中国生命哲学真理观》秘密",
-      "audio_path": "./podcasts/20250227_052625/podcast.mp3",
-      "script_path": "./podcasts/20250227_052625/summary.txt"
+      "highlight": "探秘西夏文明，探寻中国生命哲学",
+      "audio_path": "./podcasts/20250227_053622/podcast.mp3",
+      "script_path": "./podcasts/20250227_053622/summary.txt"
+    },
+    {
+      "id": "20250227_124439",
+      "date": "2025-02-27",
+      "title": "出版电台播报 2025年02月27日",
+      "highlight": "经典文学如何借国漫东风再起？",
+      "audio_path": "./podcasts/20250227_124439/podcast.mp3",
+      "script_path": "./podcasts/20250227_124439/summary.txt"
     }
   ]
 }
