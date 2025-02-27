@@ -30,8 +30,10 @@ class PodcastGenerator:
             raise ValueError("API_KEY environment variable is not set")
         self.api_base = "https://openrouter.ai/api/v1/chat/completions"
         
-        # 修改缓存文件路径，使用相对于项目根目录的路径
-        self.cache_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "main", "article_cache.json")
+        # 修改缓存文件路径，使用正确的相对路径
+        # 由于我们在 GitHub Actions 中是在 main 目录下运行脚本
+        # 所以缓存文件应该直接放在 main 目录下
+        self.cache_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "article_cache.json")
         
         self.progress_file = "process_progress.json"
         self.web_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'web')
