@@ -1,12 +1,12 @@
 {
   "podcasts": [
     {
-      "id": "20250227_054518",
+      "id": "20250227_055819",
       "date": "2025-02-27",
       "title": "出版电台播报 2025年02月27日",
-      "highlight": "探秘西夏历史，揭秘中国生命哲学",
-      "audio_path": "./podcasts/20250227_054518/podcast.mp3",
-      "script_path": "./podcasts/20250227_054518/summary.txt"
+      "highlight": "探秘历史与生活的哲学之旅",
+      "audio_path": "./podcasts/20250227_055819/podcast.mp3",
+      "script_path": "./podcasts/20250227_055819/summary.txt"
     },
     {
       "id": "20250227_124439",
