@@ -1,0 +1,7 @@
+feedparser
+requests
+beautifulsoup4
+aiohttp
+httpx
+ormsgpack
+pydantic 
