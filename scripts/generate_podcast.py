@@ -29,9 +29,9 @@ class PodcastGenerator:
         if not self.api_key:
             raise ValueError("API_KEY environment variable is not set")
         self.api_base = "https://openrouter.ai/api/v1/chat/completions"
-        self.cache_file = "article_cache.json"
+        self.cache_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "article_cache.json")
         self.progress_file = "process_progress.json"
-        self.web_dir = 'web'
+        self.web_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'web')
         self.public_dir = os.path.join(self.web_dir, 'public')
         self.podcasts_dir = os.path.join(self.public_dir, 'podcasts')
         self.index_file = os.path.join(self.public_dir, 'podcast_index.json')
