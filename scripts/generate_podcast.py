@@ -30,8 +30,8 @@ class PodcastGenerator:
             raise ValueError("API_KEY environment variable is not set")
         self.api_base = "https://openrouter.ai/api/v1/chat/completions"
         
-        # 修改缓存文件路径，使用相对于脚本的路径
-        self.cache_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "article_cache.json")
+        # 修改缓存文件路径，使用相对于项目根目录的路径
+        self.cache_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "main", "article_cache.json")
         
         self.progress_file = "process_progress.json"
         self.web_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'web')
@@ -55,6 +55,13 @@ class PodcastGenerator:
                 with open(self.cache_file, 'r', encoding='utf-8') as f:
                     cache = json.load(f)
                     
+                # 打印更详细的缓存信息
+                print(f"缓存文件大小: {os.path.getsize(self.cache_file)} 字节")
+                print(f"缓存条目数量: {len(cache.get('articles', {}))}")
+                print("缓存的文章标题:")
+                for url, article in cache.get('articles', {}).items():
+                    print(f"- {article.get('data', {}).get('title', 'No title')}")
+                
                 # 清理7天前的缓存
                 current_time = datetime.now()
                 cleaned_cache = {'articles': {}}
