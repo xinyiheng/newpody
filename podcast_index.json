@@ -1,44 +1,12 @@
 {
   "podcasts": [
     {
-      "id": "20250227_081202",
-      "date": "2025-02-27",
-      "title": "出版电台播报 2025年02月27日",
-      "highlight": "经典文学如何借国漫东风再起？",
-      "audio_path": "./podcasts/20250227_081202/podcast.mp3",
-      "script_path": "./podcasts/20250227_081202/summary.txt"
-    },
-    {
       "id": "20250227_075045",
       "date": "2025-02-27",
       "title": "出版电台播报 2025年02月27日",
       "highlight": "你提问的方式会影响一生？探寻智慧人生",
       "audio_path": "./podcasts/20250227_075045/podcast.mp3",
       "script_path": "./podcasts/20250227_075045/summary.txt"
-    },
-    {
-      "id": "20250227_073033",
-      "date": "2025-02-27",
-      "title": "出版电台播报 2025年02月27日",
-      "highlight": "老年人上网揭秘：60+网民的逆袭",
-      "audio_path": "./podcasts/20250227_073033/podcast.mp3",
-      "script_path": "./podcasts/20250227_073033/summary.txt"
-    },
-    {
-      "id": "20250227_055819",
-      "date": "2025-02-27",
-      "title": "出版电台播报 2025年02月27日",
-      "highlight": "探秘历史与生活的哲学之旅",
-      "audio_path": "./podcasts/20250227_055819/podcast.mp3",
-      "script_path": "./podcasts/20250227_055819/summary.txt"
-    },
-    {
-      "id": "20250227_124439",
-      "date": "2025-02-27",
-      "title": "出版电台播报 2025年02月27日",
-      "highlight": "经典文学如何借国漫东风再起？",
-      "audio_path": "./podcasts/20250227_124439/podcast.mp3",
-      "script_path": "./podcasts/20250227_124439/summary.txt"
     }
   ]
 }
