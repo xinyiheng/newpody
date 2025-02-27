@@ -39,7 +39,7 @@ jobs:
     - name: Cache article data
       uses: actions/cache@v3
       with:
-        path: main/article_cache.json
+        path: main/article_cache.json  # 修改为相对于仓库根目录的路径
         key: ${{ runner.os }}-article-cache-${{ github.sha }}
         restore-keys: |
           ${{ runner.os }}-article-cache-
