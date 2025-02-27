@@ -1,0 +1,36 @@
+name: Generate Podcast
+
+on:
+  schedule:
+    - cron: '0 23 * * *'  # 每天 UTC 23:00 (北京时间 7:00) 运行
+  workflow_dispatch:      # 允许手动触发
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests feedparser beautifulsoup4 httpx ormsgpack pydantic
+
+    - name: Generate podcast
+      env:
+        API_KEY: ${{ secrets.API_KEY }}
+        FISH_API_KEY: ${{ secrets.FISH_API_KEY }}
+      run: |
+        python scripts/generate_podcast.py
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./web/public
