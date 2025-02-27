@@ -542,12 +542,13 @@ class PodcastGenerator:
                 response.raise_for_status()
                 summary_content = response.json()["choices"][0]["message"]["content"]
                 
-                # 修改文章总结的格式，添加序号
+                # 修改文章总结的格式，添加原文链接
                 article_summary = f"""第{i}篇文章
 《{article['title']}》
 来源：{article['source']}
 作者：{article['author']}
 发布时间：{article['pub_time']}
+原文链接：{article['link']}
 
 {summary_content.strip()}
 
@@ -559,6 +560,7 @@ class PodcastGenerator:
                     'author': article['author'],
                     'source': article['source'],
                     'pub_time': article['pub_time'],
+                    'link': article['link'],  # 添加链接到summary对象
                     'summary': summary_content
                 }
                 summaries.append(summary)
