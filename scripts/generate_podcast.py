@@ -396,6 +396,7 @@ class PodcastGenerator:
             
             articles = []
             cache = self.load_cache()
+            seen_urls = set()  # 用于跟踪本次已处理的URL
             
             # 获取已处理的URL和它们的时间戳
             processed_urls = {}
@@ -406,80 +407,95 @@ class PodcastGenerator:
                 except:
                     continue
             
-            seen_urls = set()
-            
-            # 恢复多页处理
+            # 修改分页逻辑
             for page in range(num_pages):
-                page_url = f"{self.rss_url}?n=20&p={page + 1}"
-                print(f"\n获取第 {page + 1} 页...")
+                # 使用不同的分页参数尝试
+                page_urls = [
+                    f"{self.rss_url}&n=20&p={page + 1}",  # 尝试 n 和 p 参数
+                    f"{self.rss_url}?page={page + 1}",    # 尝试 page 参数
+                    f"{self.rss_url}?offset={page * 20}"  # 尝试 offset 参数
+                ]
                 
-                headers = {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                    'Accept': 'application/rss+xml,application/xml;q=0.9,*/*;q=0.8'
-                }
-                
-                response = requests.get(page_url, headers=headers, timeout=30)
-                feed = feedparser.parse(response.text)
-                
-                if not feed.entries:
-                    print(f"第 {page + 1} 页没有更多文章")
-                    break
-                
-                print(f"找到 {len(feed.entries)} 篇文章")
-                
-                for entry in feed.entries:
+                success = False
+                for page_url in page_urls:
+                    print(f"\n尝试获取第 {page + 1} 页 (URL: {page_url})...")
+                    
+                    headers = {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                        'Accept': 'application/rss+xml,application/xml;q=0.9,*/*;q=0.8'
+                    }
+                    
                     try:
-                        if entry.link in seen_urls:
+                        response = requests.get(page_url, headers=headers, timeout=30)
+                        feed = feedparser.parse(response.text)
+                        
+                        if not feed.entries:
+                            print(f"此URL没有返回文章，尝试下一个URL")
                             continue
                         
-                        if entry.link in processed_urls:
-                            cache_time = processed_urls[entry.link]
-                            if (datetime.now() - cache_time).days < 7:
-                                print(f"跳过最近处理的文章: {entry.get('title', 'No title')}")
+                        new_articles_count = 0
+                        print(f"找到 {len(feed.entries)} 篇文章")
+                        
+                        for entry in feed.entries:
+                            # 跳过已经处理过的URL
+                            if entry.link in seen_urls:
                                 continue
-                        
-                        seen_urls.add(entry.link)
-                        
-                        print(f"\n处理文章: {entry.get('title', 'No title')}")
-                        
-                        author = entry.get('dc_creator', '未知作者')
-                        source = entry.get('source', {}).get('title', '未知来源')
-                        
-                        content = self.fetch_article_content(entry.link)
-                        if content is not None:  # 只处理成功获取内容的文章
-                            # 检查是否需要跳过
-                            should_skip, reason = self.should_skip_article(entry.title, content)
-                            if should_skip:
-                                print(f"跳过文章，原因: {reason}")
-                                continue
+                                
+                            if entry.link in processed_urls:
+                                cache_time = processed_urls[entry.link]
+                                if (datetime.now() - cache_time).days < 7:
+                                    print(f"跳过最近处理的文章: {entry.get('title', 'No title')}")
+                                    continue
                             
-                            article = {
-                                'title': entry.title,
-                                'author': author,
-                                'source': source,
-                                'link': entry.link,
-                                'pub_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                                'content': content
-                            }
-                            articles.append(article)
+                            seen_urls.add(entry.link)
                             
-                            # 更新缓存
-                            cache['articles'][entry.link] = {
-                                'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                                'data': article
-                            }
+                            print(f"\n处理文章: {entry.get('title', 'No title')}")
                             
-                            print(f"成功添加文章: {entry.title}")
+                            # 处理文章内容
+                            content = self.fetch_article_content(entry.link)
+                            if content is not None:
+                                should_skip, reason = self.should_skip_article(entry.title, content)
+                                if should_skip:
+                                    print(f"跳过文章，原因: {reason}")
+                                    continue
+                                
+                                article = {
+                                    'title': entry.title,
+                                    'author': entry.get('dc_creator', '未知作者'),
+                                    'source': entry.get('source', {}).get('title', '未知来源'),
+                                    'link': entry.link,
+                                    'pub_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                                    'content': content
+                                }
+                                articles.append(article)
+                                
+                                # 更新缓存
+                                cache['articles'][entry.link] = {
+                                    'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                                    'data': article
+                                }
+                                
+                                print(f"成功添加文章: {entry.title}")
+                                new_articles_count += 1
+                                
+                                if len(articles) >= 100:  # 限制最大文章数
+                                    print("\n已达到最大文章数限制(100)")
+                                    success = True
+                                    break
                             
-                            if len(articles) >= 100:  # 限制最大文章数
-                                print("\n已达到最大文章数限制(100)")
-                                break
+                            time.sleep(2)  # 避免频繁请求
                         
-                        time.sleep(2)  # 避免频繁请求
+                        if new_articles_count > 0:
+                            success = True
+                            break  # 如果这个URL成功获取了新文章，就不尝试其他URL
                         
                     except Exception as e:
-                        print(f"处理文章时出错: {e}")
+                        print(f"尝试URL失败: {e}")
                         continue
+                
+                if not success:
+                    print(f"第 {page + 1} 页没有获取到新文章，停止获取")
+                    break
                 
                 if len(articles) >= 100:
                     break
