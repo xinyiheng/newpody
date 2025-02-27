@@ -1,12 +1,12 @@
 {
   "podcasts": [
     {
-      "id": "20250227_075045",
+      "id": "20250227_081202",
       "date": "2025-02-27",
       "title": "出版电台播报 2025年02月27日",
       "highlight": "你提问的方式会影响一生？探寻智慧人生",
-      "audio_path": "./podcasts/20250227_075045/podcast.mp3",
-      "script_path": "./podcasts/20250227_075045/summary.txt"
+      "audio_path": "./podcasts/20250227_081202/podcast.mp3",
+      "script_path": "./podcasts/20250227_081202/summary.txt"
     }
   ]
 }
