@@ -489,7 +489,13 @@ class PodcastGenerator:
                     timeout=30
                 ) as response:
                     result = await response.json()
-                    summary = result["choices"][0]["message"]["content"].strip()
+                    if 'choices' in result:
+                        summary = result["choices"][0]["message"]["content"].strip()
+                    elif 'response' in result:
+                        summary = result["response"].strip()
+                    else:
+                        print(f"API响应格式异常: {result}")
+                        return None
                     
                     return {
                         'title': article['title'],
@@ -634,7 +640,7 @@ h2 {
 {input_text}
 
 要求：
-1. 开场语固定为："各位听众，这里是出版电台。今天我们为您带来出版行业的最新资讯。点击音频左下角的"查看文稿"，您可以获取本播报涉及的所有文章原文以及内容总结。"
+1. 开场语固定为："各位听众，这里是出版电台。今天我们为您带来出版行业的最新资讯。点击音频左下角的"查看文稿"，您可以获取本播报涉及的所有文章原文以及内容总结。
 2. 每篇文章的播报需包含：
    - 以自然、亲切的方式介绍文章标题和来源（如"今天我们先来看一篇来自XX的文章，标题是……"）
    - 核心观点和关键信息（200-300字），语气生动，突出有趣细节
@@ -645,6 +651,8 @@ h2 {
 6. 结尾固定为："感谢收听出版电台，我们下期再见。"
 7. 不要使用等*、#、--等不能朗读的符号，确保文本适合直接朗读
 8. 必须处理所有提供的文章
+9. 结尾要加上"如果您喜欢本节目，请点击分享。"
+
 
 请直接输出播报内容。
 """
@@ -666,7 +674,13 @@ h2 {
                     timeout=180
                 ) as response:
                     result = await response.json()
-                    broadcast_script = result["choices"][0]["message"]["content"].strip()
+                    if 'choices' in result:
+                        broadcast_script = result["choices"][0]["message"]["content"].strip()
+                    elif 'response' in result:
+                        broadcast_script = result["response"].strip()
+                    else:
+                        print(f"API响应格式异常: {result}")
+                        return None
 
             # 保存播报稿
             with open(script_file, 'w', encoding='utf-8') as f:
