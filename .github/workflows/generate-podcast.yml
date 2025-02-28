@@ -53,8 +53,6 @@ jobs:
         if [ -f "gh-pages/podcast_index.json" ]; then
           cp gh-pages/podcast_index.json main/web/public/
         fi
-        # 复制 Jekyll 配置文件
-        cp main/_config.yml main/web/public/
 
     - name: Generate podcast
       id: generate
@@ -91,6 +89,16 @@ jobs:
             body: `Workflow run: ${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`
           })
     
+    - name: Check files before deploy
+      run: |
+        echo "Checking files in public directory..."
+        cd main/web/public
+        ls -la
+        echo "Checking podcasts directory..."
+        ls -la podcasts || echo "podcasts directory not found"
+        echo "Checking latest podcast..."
+        ls -la podcasts/$(ls -t podcasts | head -n1) || echo "No podcasts found"
+
     - name: Deploy to GitHub Pages
       if: steps.generate.outcome == 'success'
       uses: peaceiris/actions-gh-pages@v3
