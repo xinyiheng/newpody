@@ -1,6 +1,13 @@
 {
   "podcasts": [
     {
+      "id": "20250228_094627",
+      "date": "2025-02-28",
+      "title": "出版电台播报 2025年02月28日",
+      "transcript_path": "podcasts/20250228_094627/summary.txt",
+      "audio_path": "podcasts/20250228_094627/podcast.mp3"
+    },
+    {
       "id": "20250228_093210",
       "date": "2025-02-28",
       "title": "出版电台播报 2025年02月28日",
