@@ -449,9 +449,13 @@ class PodcastGenerator:
             return []
 
     async def summarize_single_article(self, article: Dict) -> Dict:
-        """异步总结单篇文章"""
-        try:
-            prompt = f"""请将这篇文章总结为有价值的内容，让读者能学到具体的知识。
+        """异步总结单篇文章，带重试机制"""
+        max_retries = 3
+        retry_delay = 5  # 秒
+        
+        for attempt in range(max_retries):
+            try:
+                prompt = f"""请将这篇文章总结为有价值的内容，让读者能学到具体的知识。
 
 要求：
 1. 开头简要介绍文章核心话题，不要泛泛而谈，直击重点
@@ -470,57 +474,87 @@ class PodcastGenerator:
 作者：{article['author']}
 内容：{article['content']}"""
 
-            headers = {
-                "Authorization": f"Bearer {self.api_key}",
-                "Content-Type": "application/json"
-            }
-            
-            async with aiohttp.ClientSession() as session:
-                async with session.post(
-                    self.api_base,
-                    headers=headers,
-                    json={
-                        "model": "google/gemini-2.0-pro-exp-02-05:free",
-                        "messages": [{"role": "user", "content": prompt}]
-                    },
-                    timeout=30
-                ) as response:
-                    result = await response.json()
-                    if 'choices' in result:
-                        summary = result["choices"][0]["message"]["content"].strip()
-                    elif 'response' in result:
-                        summary = result["response"].strip()
-                    else:
-                        print(f"API响应格式异常: {result}")
-                        return None
-                    
-                    return {
-                        'title': article['title'],
-                        'summary': summary,
-                        'source': article.get('source', '未知来源'),
-                        'pub_time': article.get('pub_time', ''),
-                        'link': article.get('link', ''),
-                        'content': article.get('content', '')
-                    }
-        except Exception as e:
-            print(f"总结文章失败: {article['title']}, 错误: {e}")
-            return None
+                headers = {
+                    "Authorization": f"Bearer {self.api_key}",
+                    "Content-Type": "application/json"
+                }
+                
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(
+                        self.api_base,
+                        headers=headers,
+                        json={
+                            "model": "google/gemini-2.0-pro-exp-02-05:free",
+                            "messages": [{"role": "user", "content": prompt}]
+                        },
+                        timeout=30
+                    ) as response:
+                        result = await response.json()
+                        
+                        # 处理速率限制错误
+                        if 'error' in result and result['error'].get('code') == 429:
+                            if attempt < max_retries - 1:
+                                wait_time = retry_delay * (attempt + 1)
+                                print(f"遇到速率限制，等待 {wait_time} 秒后重试...")
+                                await asyncio.sleep(wait_time)
+                                continue
+                            else:
+                                print("达到最大重试次数，跳过此文章")
+                                return None
+                        
+                        # 处理正常响应
+                        if 'choices' in result:
+                            summary = result["choices"][0]["message"]["content"].strip()
+                        elif 'response' in result:
+                            summary = result["response"].strip()
+                        else:
+                            print(f"API响应格式异常: {result}")
+                            return None
+                        
+                        return {
+                            'title': article['title'],
+                            'summary': summary,
+                            'source': article.get('source', '未知来源'),
+                            'pub_time': article.get('pub_time', ''),
+                            'link': article.get('link', ''),
+                            'content': article.get('content', '')
+                        }
+                        
+            except Exception as e:
+                if attempt < max_retries - 1:
+                    print(f"总结文章失败: {article['title']}, 错误: {e}, 将重试...")
+                    await asyncio.sleep(retry_delay)
+                    continue
+                else:
+                    print(f"总结文章最终失败: {article['title']}, 错误: {e}")
+                    return None
 
     async def summarize_articles(self, articles: List[Dict]) -> List[Dict]:
-        """并行总结多篇文章"""
-        print(f"\n开始并行总结 {len(articles)} 篇文章...")
+        """并行总结多篇文章，处理速率限制"""
+        print(f"\n开始总结 {len(articles)} 篇文章...")
         
-        # 创建任务列表
-        tasks = [self.summarize_single_article(article) for article in articles]
+        # 每批处理的文章数
+        batch_size = 15  # 考虑到免费版每分钟20次的限制
+        summaries = []
         
-        # 并行执行所有任务
-        summaries = await asyncio.gather(*tasks)
+        for i in range(0, len(articles), batch_size):
+            batch = articles[i:i + batch_size]
+            print(f"\n处理第 {i+1} 到 {i+len(batch)} 篇文章...")
+            
+            tasks = [self.summarize_single_article(article) for article in batch]
+            batch_summaries = await asyncio.gather(*tasks)
+            
+            # 过滤掉失败的总结
+            valid_summaries = [s for s in batch_summaries if s is not None]
+            summaries.extend(valid_summaries)
+            
+            # 如果不是最后一批，等待一分钟
+            if i + batch_size < len(articles):
+                print("等待60秒以避免速率限制...")
+                await asyncio.sleep(60)
         
-        # 过滤掉失败的总结
-        valid_summaries = [s for s in summaries if s is not None]
-        
-        print(f"完成 {len(valid_summaries)} 篇文章的总结")
-        return valid_summaries
+        print(f"完成 {len(summaries)} 篇文章的总结")
+        return summaries
 
     def clear_cache_entry(self, url):
         """删除缓存中的特定文章记录"""

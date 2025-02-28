@@ -55,17 +55,28 @@ jobs:
         fi
     
     - name: Generate podcast
-      id: generate  # 添加 id 以便后续步骤引用
+      id: generate
       run: |
         cd main
-        pwd  # 打印当前工作目录
-        ls -la  # 列出目录内容
+        pwd
+        ls -la
         python scripts/generate_podcast.py
       env:
         API_KEY: ${{ secrets.API_KEY }}
         FISH_API_KEY: ${{ secrets.FISH_API_KEY }}
-      continue-on-error: true  # 允许失败继续执行后续步骤
-    
+      continue-on-error: true
+
+    # 添加提交缓存文件的步骤
+    - name: Commit cache file
+      if: steps.generate.outcome == 'success'
+      run: |
+        cd main
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add article_cache.json
+        git commit -m "Update article cache" || echo "No changes to commit"
+        git push origin main || echo "No changes to push"
+
     - name: Send notification on failure
       if: steps.generate.outcome == 'failure'
       uses: actions/github-script@v6
@@ -79,7 +90,7 @@ jobs:
           })
     
     - name: Deploy to GitHub Pages
-      if: steps.generate.outcome == 'success'  # 只在生成成功时部署
+      if: steps.generate.outcome == 'success'
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
