@@ -461,14 +461,15 @@ class PodcastGenerator:
 1. 开头简要介绍文章核心话题，不要泛泛而谈，直击重点
 2. 列出文章最重要的2-3个具体事实或数据，不要
 用"进行了深入探讨"这样的空话
-3. 如果文章讨论了历史，请具体说明是什么时间、什么事件、产生了什么影响
-4. 如果文章介绍了新事物，请说明它的独特之处和实际应用场景
-5. 如果文章有争议观点，请说明各方论据
-6. 总结文章最有价值的发现或启示，以及对读者最有帮助的建议
-7. 语言要生动具体，避免空泛的形容词
+3. 使用中文数字标记大标题（一、二、三），使用阿拉伯数字标记具体内容（1. 2. 3.）
+4. 如果文章讨论了历史，请具体说明是什么时间、什么事件、产生了什么影响
+5. 如果文章介绍了新事物，请说明它的独特之处和实际应用场景
+6. 如果文章有争议观点，请说明各方论据
+7. 总结文章最有价值的发现或启示，以及对读者最有帮助的建议
+8. 语言要生动具体，避免空泛的形容词
 8. 按照"背景介绍 - 关键发现 - 实际意义"的结构组织内容
-9. 每部分控制在200-300字，确保简明扼要但包含必要细节
-10. 段落之间保持一个空行，使用中文数字作为标题
+10. 每部分控制在200-300字，确保简明扼要但包含必要细节
+11. 段落之间保持一个空行，使用中文数字作为标题
 
 文章标题：{article['title']}
 作者：{article['author']}
@@ -587,81 +588,47 @@ class PodcastGenerator:
         return dt.strftime('%Y年%m月%d日 %H:%M')
 
     async def generate_final_summary(self, summaries: List[Dict], timestamp: str) -> str:
+        """生成最终的汇总摘要和播报稿"""
         try:
             podcast_dir = os.path.join(self.podcasts_dir, timestamp)
-            summary_file = os.path.join(podcast_dir, 'summary.html')
-            articles_file = os.path.join(podcast_dir, 'articles.md')
-            script_file = os.path.join(podcast_dir, 'script.md')
             
-            # 保存总结
-            with open(summary_file, 'w', encoding='utf-8') as f_summary:
-                # 写入完整的 HTML 结构
-                f_summary.write("""<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>出版行业新闻总结</title>
-    <style>
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            line-height: 1.6;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h1 { 
-            color: #2c3e50;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
-        }
-        h2 { 
-            color: #34495e;
-            margin-top: 30px;
-        }
-        .meta-info {
-            color: #7f8c8d;
-            font-size: 0.9em;
-            margin-bottom: 15px;
-        }
-        .article-link {
-            color: #3498db;
-            text-decoration: none;
-        }
-        .article-link:hover {
-            text-decoration: underline;
-        }
-        .divider {
-            border-top: 1px solid #eee;
-            margin: 30px 0;
-        }
-    </style>
-</head>
-<body>
-<h1>出版行业新闻总结</h1>
-""")
+            # 保存总结到正确位置
+            summary_file = os.path.join(podcast_dir, 'summary.txt')
+            articles_file = os.path.join(podcast_dir, 'articles.txt')
+            script_file = os.path.join(podcast_dir, 'script.txt')
+            
+            # 保存总结和原文
+            with open(summary_file, 'w', encoding='utf-8') as f_summary, \
+                 open(articles_file, 'w', encoding='utf-8') as f_articles:
                 
-                # 写入文章内容
+                # 添加文章数量信息
+                f_summary.write("出版行业新闻总结\n\n")
+                f_summary.write(f"今天总结了 {len(summaries)} 篇文章\n\n")
+                f_summary.write("="*50 + "\n\n")  # 添加分隔线
+                
+                f_articles.write("出版行业新闻原文\n\n")
+                
                 for i, s in enumerate(summaries, 1):
                     formatted_time = self.format_datetime(s['pub_time'])
                     
-                    f_summary.write(f"<h2>{s['title']}</h2>\n")
-                    f_summary.write('<div class="meta-info">\n')
-                    f_summary.write(f"来源：{s['source']}<br>\n")
-                    f_summary.write(f"发布时间：{formatted_time}<br>\n")
-                    f_summary.write(f'<a href="{s["link"]}" class="article-link" target="_blank">阅读原文</a>\n')
-                    f_summary.write('</div>\n')
+                    # 写入总结
+                    f_summary.write(f"文章{i}/{len(summaries)}\n")  # 显示当前是第几篇，共几篇
+                    f_summary.write(f"标题：{s['title']}\n")
+                    f_summary.write(f"来源：{s['source']}\n")
+                    f_summary.write(f"原文链接：{s['link']}\n")
+                    f_summary.write(f"发布时间：{formatted_time}\n")
+                    f_summary.write(f"总结：\n{s['summary']}\n")
+                    f_summary.write("\n" + "="*50 + "\n\n")
                     
-                    # 将换行符转换为 HTML 段落
-                    paragraphs = s['summary'].split('\n\n')
-                    for p in paragraphs:
-                        if p.strip():
-                            f_summary.write(f"<p>{p}</p>\n")
-                    
-                    f_summary.write('<div class="divider"></div>\n')
-                
-                f_summary.write("</body></html>")
-
+                    # 写入原文
+                    f_articles.write(f"文章{i}\n")
+                    f_articles.write(f"标题：{s['title']}\n")
+                    f_articles.write(f"来源：{s['source']}\n")
+                    f_articles.write(f"原文链接：{s['link']}\n")
+                    f_articles.write(f"发布时间：{formatted_time}\n")
+                    f_articles.write(f"原文：\n{s.get('content', '未获取到原文')}\n")
+                    f_articles.write("\n" + "="*50 + "\n\n")
+            
             # 生成播报稿
             article_count = len(summaries)
             input_text = "\n\n".join([
@@ -691,7 +658,6 @@ class PodcastGenerator:
 请直接输出播报内容。
 """
 
-            # 添加 headers 定义
             headers = {
                 "Authorization": f"Bearer {self.api_key}",
                 "Content-Type": "application/json"
@@ -701,7 +667,7 @@ class PodcastGenerator:
             async with aiohttp.ClientSession() as session:
                 async with session.post(
                     self.api_base,
-                    headers=headers,  # 现在 headers 已定义
+                    headers=headers,
                     json={
                         "model": "google/gemini-2.0-flash-001",
                         "messages": [{"role": "user", "content": prompt}]
@@ -730,13 +696,13 @@ class PodcastGenerator:
                 print(f"音频生成成功: {audio_file}")
                 audio_path = f'./podcasts/{timestamp}/podcast.mp3'
 
-            # 更新索引中的文件路径
+            # 更新索引
             podcast_data = {
                 'id': timestamp,
                 'date': datetime.now().strftime('%Y-%m-%d'),
                 'title': f"出版电台播报 {datetime.now().strftime('%Y年%m月%d日')}",
-                'summary_path': f'./podcasts/{timestamp}/summary.html',
-                'audio_path': audio_path,  # 现在 audio_path 已经定义
+                'summary_path': f'./podcasts/{timestamp}/summary.txt',  # 改为 .txt
+                'audio_path': audio_path,
             }
             self.update_podcast_index(podcast_data)
             
