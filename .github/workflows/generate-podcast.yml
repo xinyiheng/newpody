@@ -188,7 +188,7 @@ jobs:
           head -20 podcast_index.json
           
           # 使用 Python 脚本根据播客内容生成副标题
-          python3 -c '
+          python3 -c "
 import json
 import os
 import random
@@ -196,38 +196,38 @@ import requests
 from bs4 import BeautifulSoup
 
 # 读取 podcast_index.json
-with open("podcast_index.json", "r", encoding="utf-8") as f:
+with open('podcast_index.json', 'r', encoding='utf-8') as f:
     data = json.load(f)
 
 # 处理每个播客
-for podcast in data["podcasts"]:
+for podcast in data['podcasts']:
     # 获取文稿路径
-    transcript_path = podcast.get("transcript_path", "")
+    transcript_path = podcast.get('transcript_path', '')
     if not transcript_path:
         continue
         
     # 移除路径中的 ./ 前缀
-    if transcript_path.startswith("./"):
+    if transcript_path.startswith('./'):
         transcript_path = transcript_path[2:]
     
     # 构建完整路径
-    full_path = os.path.join(".", transcript_path)
+    full_path = os.path.join('.', transcript_path)
     
     # 检查文件是否存在
     if not os.path.exists(full_path):
-        print(f"文件不存在: {full_path}")
+        print(f'文件不存在: {full_path}')
         continue
     
     try:
         # 读取文稿内容
-        with open(full_path, "r", encoding="utf-8") as f:
+        with open(full_path, 'r', encoding='utf-8') as f:
             content = f.read()
         
         # 提取文章标题
         titles = []
-        for line in content.split("\n"):
-            if line.startswith("标题："):
-                title = line.replace("标题：", "").strip()
+        for line in content.split('\n'):
+            if line.startswith('标题：'):
+                title = line.replace('标题：', '').strip()
                 if title:
                     titles.append(title)
         
@@ -239,7 +239,7 @@ for podcast in data["podcasts"]:
                 # 分词并提取关键词
                 words = title.split()
                 for word in words:
-                    if len(word) > 1 and word not in ["的", "了", "和", "与", "在", "是", "有", "为"]:
+                    if len(word) > 1 and word not in ['的', '了', '和', '与', '在', '是', '有', '为']:
                         keywords.append(word)
             
             # 如果有关键词，生成副标题
@@ -254,13 +254,13 @@ for podcast in data["podcasts"]:
                 
                 # 生成副标题模板
                 templates = [
-                    "重磅！{kw1}+{kw2}引爆出版圈，{kw3}成新趋势",
-                    "{kw1}如何改变出版业？{kw2}与{kw3}的碰撞",
-                    "独家解析：{kw1}背后的{kw2}，{kw3}成关键",
-                    "出版热点：从{kw1}到{kw2}，{kw3}引领未来",
-                    "{kw1}引领阅读新风向，{kw2}成为焦点",
-                    "深度剖析：{kw1}如何影响{kw2}，{kw3}是关键",
-                    "行业变革！{kw1}与{kw2}融合，{kw3}成新机遇"
+                    '重磅！{kw1}+{kw2}引爆出版圈，{kw3}成新趋势',
+                    '{kw1}如何改变出版业？{kw2}与{kw3}的碰撞',
+                    '独家解析：{kw1}背后的{kw2}，{kw3}成关键',
+                    '出版热点：从{kw1}到{kw2}，{kw3}引领未来',
+                    '{kw1}引领阅读新风向，{kw2}成为焦点',
+                    '深度剖析：{kw1}如何影响{kw2}，{kw3}是关键',
+                    '行业变革！{kw1}与{kw2}融合，{kw3}成新机遇'
                 ]
                 
                 # 随机选择一个模板
@@ -268,27 +268,27 @@ for podcast in data["podcasts"]:
                 
                 # 填充关键词
                 highlight = template.format(
-                    kw1=selected_keywords[0] if len(selected_keywords) > 0 else "出版",
-                    kw2=selected_keywords[1] if len(selected_keywords) > 1 else "阅读",
-                    kw3=selected_keywords[2] if len(selected_keywords) > 2 else "创新"
+                    kw1=selected_keywords[0] if len(selected_keywords) > 0 else '出版',
+                    kw2=selected_keywords[1] if len(selected_keywords) > 1 else '阅读',
+                    kw3=selected_keywords[2] if len(selected_keywords) > 2 else '创新'
                 )
                 
                 # 设置副标题
-                podcast["highlight"] = highlight
+                podcast['highlight'] = highlight
             else:
-                podcast["highlight"] = "探索出版行业的最新动态，聆听行业专家的深度解析"
+                podcast['highlight'] = '探索出版行业的最新动态，聆听行业专家的深度解析'
         else:
-            podcast["highlight"] = "探索出版行业的最新动态，聆听行业专家的深度解析"
+            podcast['highlight'] = '探索出版行业的最新动态，聆听行业专家的深度解析'
     except Exception as e:
-        print(f"处理文稿时出错: {e}")
-        podcast["highlight"] = "探索出版行业的最新动态，聆听行业专家的深度解析"
+        print(f'处理文稿时出错: {e}')
+        podcast['highlight'] = '探索出版行业的最新动态，聆听行业专家的深度解析'
 
 # 保存修改后的文件
-with open("podcast_index.json", "w", encoding="utf-8") as f:
+with open('podcast_index.json', 'w', encoding='utf-8') as f:
     json.dump(data, f, ensure_ascii=False, indent=2)
 
-print("已根据播客内容生成副标题")
-      '
+print('已根据播客内容生成副标题')
+"
       
       # 显示修改后的内容
       echo "修改后的 podcast_index.json 内容片段:"
