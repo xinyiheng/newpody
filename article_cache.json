@@ -1011,6 +1011,16 @@
         "pub_time": "Wed, 26 Feb 2025 14:54:51 +0000"
       },
       "filter_reason": "fetch_failed"
+    },
+    "https://mp.weixin.qq.com/s/cb3lSJdSxNwB32X171kElA": {
+      "timestamp": "2025-02-28 08:21:46",
+      "data": {
+        "title": "心理学经典《动机与人格》",
+        "author": "未知作者",
+        "source": "人民邮电出版社",
+        "link": "https://mp.weixin.qq.com/s/cb3lSJdSxNwB32X171kElA",
+        "pub_time": "Thu, 27 Feb 2025 14:03:23 +0000"
+      }
     }
   }
 }
