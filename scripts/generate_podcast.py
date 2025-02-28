@@ -31,16 +31,12 @@ class PodcastGenerator:
             raise ValueError("API_KEY environment variable is not set")
         self.api_base = "https://openrouter.ai/api/v1/chat/completions"
         
-        # 修改缓存文件路径，使用正确的相对路径
-        # 由于我们在 GitHub Actions 中是在 main 目录下运行脚本
-        # 所以缓存文件应该直接放在 main 目录下
-        self.cache_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "article_cache.json")
-        
-        self.progress_file = "process_progress.json"
-        self.web_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'web')
-        self.public_dir = os.path.join(self.web_dir, 'public')
-        self.podcasts_dir = os.path.join(self.public_dir, 'podcasts')
-        self.index_file = os.path.join(self.public_dir, 'podcast_index.json')
+        # 所有路径都相对于 main 目录
+        self.cache_file = "article_cache.json"
+        self.web_dir = "web"
+        self.public_dir = os.path.join(self.web_dir, "public")
+        self.podcasts_dir = os.path.join(self.public_dir, "podcasts")
+        self.index_file = os.path.join(self.public_dir, "podcast_index.json")
         self.fish_api_key = os.environ.get('FISH_API_KEY')
         if not self.fish_api_key:
             raise ValueError("FISH_API_KEY environment variable is not set")
@@ -96,8 +92,9 @@ class PodcastGenerator:
     def save_cache(self, cache: Dict):
         """保存文章缓存"""
         try:
-            print(f"\n正在保存缓存，共 {len(cache['articles'])} 个条目")
+            print(f"当前工作目录: {os.getcwd()}")
             print(f"缓存文件路径: {os.path.abspath(self.cache_file)}")
+            print(f"\n正在保存缓存，共 {len(cache['articles'])} 个条目")
             
             # 确保缓存目录存在
             cache_dir = os.path.dirname(os.path.abspath(self.cache_file))
