@@ -139,20 +139,8 @@ class PodcastGenerator:
                 print(f"获取现有索引失败: {e}")
                 index = {'podcasts': []}
 
-            # 构建新的播客数据
-            new_podcast = {
-                'id': podcast_data['id'],
-                'date': podcast_data['date'],
-                'title': podcast_data['title'],
-                'transcript_path': podcast_data['summary_path'],
-            }
-            
-            # 如果有音频路径，添加到数据中
-            if podcast_data.get('audio_path'):
-                new_podcast['audio_path'] = podcast_data['audio_path']
-
             # 添加新播客信息到列表开头
-            index['podcasts'].insert(0, new_podcast)
+            index['podcasts'].insert(0, podcast_data)
             
             # 只保留最近50期
             index['podcasts'] = index['podcasts'][:50]
@@ -454,24 +442,32 @@ class PodcastGenerator:
     async def summarize_single_article(self, article: Dict) -> Dict:
         """异步总结单篇文章"""
         try:
-            prompt = f"""请将这篇文章总结为有价值的内容，让读者能学到具体的知识。
+            prompt = f"""请将这篇文章总结为结构清晰的内容，使用以下格式：
 
-要求：
-1. 开头简要介绍文章核心话题，不要泛泛而谈，直击重点
-2. 列出文章最重要的2-3个具体事实或数据，不要
-用"进行了深入探讨"这样的空话
-3. 如果文章讨论了历史，请具体说明是什么时间、什么事件、产生了什么影响
-4. 如果文章介绍了新事物，请说明它的独特之处和实际应用场景
-5. 如果文章有争议观点，请说明各方论据
-6. 总结文章最有价值的发现或启示，以及对读者最有帮助的建议
-7. 语言要生动具体，避免空泛的形容词
-8. 按照"背景介绍 - 关键发现 - 实际意义"的结构组织内容
-9. 每部分控制在200-300字，确保简明扼要但包含必要细节
-10. 段落之间保持一个空行，使用中文数字作为标题
+            一、主要观点
+            1. 第一个观点
+            2. 第二个观点
+            3. 第三个观点
 
-文章标题：{article['title']}
-作者：{article['author']}
-内容：{article['content']}"""
+            二、关键细节
+            1. 细节一
+            2. 细节二
+            3. 细节三
+
+            三、结论启示
+            1. 主要结论
+            2. 实践建议
+
+            要求：
+            - 使用中文数字标记大标题（一、二、三），使用阿拉伯数字标记具体内容（1. 2. 3.）
+            - 语言正式且简洁，适合书面阅读，避免口语化表达
+            - 每部分控制在200-300字，确保简明扼要但包含必要背景和核心信息
+            - 段落之间保持一个空行，不要使用特殊符号（如*、#、-）
+            - 根据文章内容提取关键信息，确保不看原文也能理解
+
+            文章标题：{article['title']}
+            作者：{article['author']}
+            内容：{article['content']}"""
 
             headers = {
                 "Authorization": f"Bearer {self.api_key}",
@@ -483,7 +479,7 @@ class PodcastGenerator:
                     self.api_base,
                     headers=headers,
                     json={
-                        "model": "google/gemini-2.0-pro-exp-02-05:free",
+                        "model": "qwen/qwen-turbo",
                         "messages": [{"role": "user", "content": prompt}]
                     },
                     timeout=30
@@ -553,75 +549,41 @@ class PodcastGenerator:
         """生成最终的汇总摘要和播报稿"""
         try:
             podcast_dir = os.path.join(self.podcasts_dir, timestamp)
-            summary_file = os.path.join(podcast_dir, 'summary.md')
-            articles_file = os.path.join(podcast_dir, 'articles.md')
-            script_file = os.path.join(podcast_dir, 'script.md')
+            
+            # 保存总结到正确位置
+            summary_file = os.path.join(podcast_dir, 'summary.txt')
+            articles_file = os.path.join(podcast_dir, 'articles.txt')  # 新增原文文件
             
             # 保存总结和原文
             with open(summary_file, 'w', encoding='utf-8') as f_summary, \
                  open(articles_file, 'w', encoding='utf-8') as f_articles:
                 
-                # 写入 summary.md
-                f_summary.write("""---
-layout: post
-title: 出版行业新闻总结
----
-
-<style>
-h1 { 
-    color: #2c3e50;
-    border-bottom: 2px solid #3498db;
-    padding-bottom: 10px;
-}
-h2 { 
-    color: #34495e;
-    margin-top: 30px;
-}
-.meta-info {
-    color: #7f8c8d;
-    font-size: 0.9em;
-    margin-bottom: 15px;
-}
-.article-link {
-    color: #3498db;
-    text-decoration: none;
-}
-.article-link:hover {
-    text-decoration: underline;
-}
-.divider {
-    border-top: 1px solid #eee;
-    margin: 30px 0;
-}
-</style>
-
-""")
-                
-                f_summary.write("# 出版行业新闻总结\n\n")
-                f_articles.write("# 出版行业新闻原文\n\n")
+                f_summary.write("出版行业新闻总结\n\n")
+                f_articles.write("出版行业新闻原文\n\n")
                 
                 for i, s in enumerate(summaries, 1):
+                    # 格式化时间
                     formatted_time = self.format_datetime(s['pub_time'])
                     
-                    # 写入 summary.md
-                    f_summary.write(f"## {s['title']}\n\n")
-                    f_summary.write('<div class="meta-info">\n')
-                    f_summary.write(f"来源：{s['source']}  \n")
-                    f_summary.write(f"发布时间：{formatted_time}  \n")
-                    f_summary.write(f"<a href='{s['link']}' class='article-link' target='_blank'>阅读原文</a>\n")
-                    f_summary.write('</div>\n\n')
-                    f_summary.write(f"{s['summary']}\n\n")
-                    f_summary.write('<div class="divider"></div>\n\n')
+                    # 写入总结
+                    f_summary.write(f"文章{i}\n")
+                    f_summary.write(f"标题：{s['title']}\n")
+                    f_summary.write(f"来源：{s['source']}\n")
+                    f_summary.write(f"原文链接：{s['link']}\n")
+                    f_summary.write(f"发布时间：{formatted_time}\n")
+                    f_summary.write(f"总结：\n{s['summary']}\n")
+                    f_summary.write("\n" + "="*50 + "\n\n")
                     
-                    # 写入 articles.md
-                    f_articles.write(f"## {s['title']}\n\n")
-                    f_articles.write(f"来源：{s['source']}  \n")
-                    f_articles.write(f"发布时间：{formatted_time}  \n")
-                    f_articles.write(f"原文链接：{s['link']}  \n\n")
-                    f_articles.write(f"{s.get('content', '未获取到原文')}\n\n")
-                    f_articles.write("---\n\n")
+                    # 写入原文
+                    f_articles.write(f"文章{i}\n")
+                    f_articles.write(f"标题：{s['title']}\n")
+                    f_articles.write(f"来源：{s['source']}\n")
+                    f_articles.write(f"原文链接：{s['link']}\n")
+                    f_articles.write(f"发布时间：{formatted_time}\n")
+                    f_articles.write(f"原文：\n{s.get('content', '未获取到原文')}\n")
+                    f_articles.write("\n" + "="*50 + "\n\n")
             
-            # 生成播报稿
+            # 生成播报稿的代码保持不变
             article_count = len(summaries)
             input_text = "\n\n".join([
                 f"文章{i+1}:\n标题: {s['title']}\n来源: {s['source']}\n总结:\n{s['summary']}"
@@ -634,7 +596,7 @@ h2 {
 {input_text}
 
 要求：
-1. 开场语固定为："各位听众，这里是出版电台。今天我们为您带来出版行业的最新资讯。点击音频左下角的"查看文稿"，您可以获取本播报涉及的所有文章原文以及内容总结。"
+1. 开场语固定为："各位听众，这里是出版电台。今天我们为您带来出版行业的最新资讯。点击音频左下角的“查看文稿”，您可以获取本播报涉及的所有文章原文以及内容总结。"
 2. 每篇文章的播报需包含：
    - 以自然、亲切的方式介绍文章标题和来源（如"今天我们先来看一篇来自XX的文章，标题是……"）
    - 核心观点和关键信息（200-300字），语气生动，突出有趣细节
@@ -651,47 +613,54 @@ h2 {
 
             headers = {
                 "Authorization": f"Bearer {self.api_key}",
+                "HTTP-Referer": "https://github.com/",
                 "Content-Type": "application/json"
             }
 
-            # 生成播报稿
+            payload = {
+                "model": "deepseek/deepseek-r1",
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": "你是出版电台的主播，擅长制作生动的播报内容。"
+                    },
+                    {"role": "user", "content": prompt}
+                ],
+                "temperature": 0.7,
+                "top_p": 0.9
+            }
+
             async with aiohttp.ClientSession() as session:
                 async with session.post(
                     self.api_base,
                     headers=headers,
-                    json={
-                        "model": "google/gemini-2.0-pro-exp-02-05:free",
-                        "messages": [{"role": "user", "content": prompt}]
-                    },
+                    json=payload,
                     timeout=180
                 ) as response:
                     result = await response.json()
                     broadcast_script = result["choices"][0]["message"]["content"].strip()
-
-            # 保存播报稿
-            with open(script_file, 'w', encoding='utf-8') as f:
-                f.write(broadcast_script)
-
-            # 生成音频
-            audio_file = await self.generate_audio(broadcast_script, timestamp)
-            if not audio_file:
-                print("音频生成失败")
-                audio_path = None
-            else:
-                print(f"音频生成成功: {audio_file}")
-                audio_path = f'./podcasts/{timestamp}/podcast.mp3'
-
-            # 更新索引
-            podcast_data = {
-                'id': timestamp,
-                'date': datetime.now().strftime('%Y-%m-%d'),
-                'title': f"出版电台播报 {datetime.now().strftime('%Y年%m月%d日')}",
-                'summary_path': f'./podcasts/{timestamp}/summary.md',
-                'audio_path': audio_path,  # 添加音频路径
-            }
-            self.update_podcast_index(podcast_data)
-            
-            return summary_file
+                    
+                    # 验证是否包含所有文章
+                    for summary in summaries:
+                        if summary['source'] not in broadcast_script:
+                            print(f"警告：未找到来源 '{summary['source']}' 的内容")
+                    
+                    # 保存播报稿到正确位置
+                    script_file = os.path.join(podcast_dir, 'script.txt')
+                    with open(script_file, 'w', encoding='utf-8') as f:
+                        f.write(broadcast_script)
+                    
+                    # 添加summary文件的路径
+                    podcast_data = {
+                        'id': timestamp,
+                        'date': datetime.now().strftime('%Y-%m-%d'),
+                        'title': f"出版电台播报 {datetime.now().strftime('%Y年%m月%d日')}",
+                        'summary_path': f'./podcasts/{timestamp}/summary.txt',
+                        'script_path': f'./podcasts/{timestamp}/script.txt'
+                    }
+                    self.update_podcast_index(podcast_data)
+                    
+                    return broadcast_script
 
         except Exception as e:
             print(f"生成播报稿失败: {e}")
@@ -720,13 +689,13 @@ async def main():
         return
         
     # 4. 生成最终播报稿
-    summary_file = await generator.generate_final_summary(summaries, timestamp)
-    if not summary_file:
+    broadcast_script = await generator.generate_final_summary(summaries, timestamp)
+    if not broadcast_script:
         print("生成播报稿失败")
         return
     
     print("\n处理完成!")
-    print(f"文件已保存在: {summary_file}")
+    print(f"文件已保存在: {podcast_dir}")
 
 if __name__ == "__main__":
     

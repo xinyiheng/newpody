@@ -1,12 +1,83 @@
 {
   "podcasts": [
     {
-      "id": "20250227_124439",
+      "id": "20250228_132716",
+      "date": "2025-02-28",
+      "title": "出版电台播报 2025年02月28日",
+      "transcript_path": "./podcasts/20250228_132716/summary.md",
+      "audio_path": "./podcasts/20250228_132716/podcast.mp3"
+    },
+    {
+      "id": "20250227_232159",
+      "date": "2025-02-27",
+      "title": "出版电台播报 2025年02月27日",
+      "highlight": "18本狠人猛读书单，你读过几本？",
+      "audio_path": "./podcasts/20250227_232159/podcast.mp3",
+      "script_path": "./podcasts/20250227_232159/summary.txt"
+    },
+    {
+      "id": "20250227_222255",
+      "date": "2025-02-27",
+      "title": "出版电台播报 2025年02月27日",
+      "highlight": "发现真问题，锁定畅销书，探寻女性视角",
+      "audio_path": "./podcasts/20250227_222255/podcast.mp3",
+      "script_path": "./podcasts/20250227_222255/summary.txt"
+    },
+    {
+      "id": "20250227_141928",
+      "date": "2025-02-27",
+      "title": "出版电台播报 2025年02月27日",
+      "highlight": "Marvel与DC跨界合作，新时代来临？",
+      "audio_path": "./podcasts/20250227_141928/podcast.mp3",
+      "script_path": "./podcasts/20250227_141928/summary.txt"
+    },
+    {
+      "id": "20250227_135625",
+      "date": "2025-02-27",
+      "title": "出版电台播报 2025年02月27日",
+      "highlight": "经典文学如何借国漫东风崛起？",
+      "audio_path": "./podcasts/20250227_135625/podcast.mp3",
+      "script_path": "./podcasts/20250227_135625/summary.txt"
+    },
+    {
+      "id": "20250227_131626",
+      "date": "2025-02-27",
+      "title": "出版电台播报 2025年02月27日",
+      "highlight": "经典与新知：对话未来与心灵",
+      "audio_path": "./podcasts/20250227_131626/podcast.mp3",
+      "script_path": "./podcasts/20250227_131626/summary.txt"
+    },
+    {
+      "id": "20250227_130356",
       "date": "2025-02-27",
       "title": "出版电台播报 2025年02月27日",
       "highlight": "经典文学如何借国漫东风再起？",
-      "audio_path": "./podcasts/20250227_124439/podcast.mp3",
-      "script_path": "./podcasts/20250227_124439/summary.txt"
+      "audio_path": "./podcasts/20250227_130356/podcast.mp3",
+      "script_path": "./podcasts/20250227_130356/summary.txt"
+    },
+    {
+      "id": "20250227_120912",
+      "date": "2025-02-27",
+      "title": "出版电台播报 2025年02月27日",
+      "highlight": "你提问的方式，将影响你的一生？",
+      "audio_path": "./podcasts/20250227_120912/podcast.mp3",
+      "script_path": "./podcasts/20250227_120912/summary.txt"
+    },
+    {
+      "id": "20250227_084521",
+      "date": "2025-02-27",
+      "title": "出版电台播报 2025年02月27日",
+      "highlight": "经典文学如何借国漫东风再起？",
+      "audio_path": "./podcasts/20250227_084521/podcast.mp3",
+      "script_path": "./podcasts/20250227_084521/summary.txt"
+    },
+    {
+      "id": "20250227_081202",
+      "date": "2025-02-27",
+      "title": "出版电台播报 2025年02月27日",
+      "highlight": "你提问的方式会影响一生？探寻智慧人生",
+      "audio_path": "./podcasts/20250227_081202/podcast.mp3",
+      "script_path": "./podcasts/20250227_081202/summary.txt"
     }
   ]
 }
