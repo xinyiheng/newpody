@@ -698,7 +698,7 @@ class PodcastGenerator:
                 'id': timestamp,
                 'date': datetime.now().strftime('%Y-%m-%d'),
                 'title': f"出版电台播报 {datetime.now().strftime('%Y年%m月%d日')}",
-                'summary_path': f'./podcasts/{timestamp}/summary.txt',  # 保持 ./ 前缀
+                'transcript_path': f'./podcasts/{timestamp}/summary.txt',  # 保持 ./ 前缀
                 'audio_path': f'./podcasts/{timestamp}/podcast.mp3',  # 保持 ./ 前缀
             }
             self.update_podcast_index(podcast_data)
