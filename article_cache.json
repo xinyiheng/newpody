@@ -208,17 +208,6 @@
         "pub_time": "Thu, 27 Feb 2025 14:03:23 +0000"
       }
     },
-    "https://mp.weixin.qq.com/s/EW8FeeH9D-v3tb4Fia1Pcg": {
-      "timestamp": "2025-02-28 07:39:16",
-      "data": {
-        "title": "终于有本书把DeepSeek讲透了，太实用！",
-        "author": "未知作者",
-        "source": "人民邮电出版社",
-        "link": "https://mp.weixin.qq.com/s/EW8FeeH9D-v3tb4Fia1Pcg",
-        "pub_time": "Thu, 27 Feb 2025 14:03:23 +0000"
-      },
-      "filter_reason": "fetch_failed"
-    },
     "https://mp.weixin.qq.com/s/cDhM-UuUTmmjfStrhaX_1A": {
       "timestamp": "2025-02-28 07:39:18",
       "data": {
@@ -339,16 +328,6 @@
         "author": "未知作者",
         "source": "广西师大出版社",
         "link": "https://mp.weixin.qq.com/s/gjCZZUyw-oQmvGOKT0Gmww",
-        "pub_time": "Thu, 27 Feb 2025 13:58:47 +0000"
-      }
-    },
-    "https://mp.weixin.qq.com/s/dNdA9hGmd-ie7uSWY7_jRg": {
-      "timestamp": "2025-02-28 07:40:22",
-      "data": {
-        "title": "吴孟达：演员就是骗子，我骗了几代人",
-        "author": "未知作者",
-        "source": "广西师大出版社",
-        "link": "https://mp.weixin.qq.com/s/dNdA9hGmd-ie7uSWY7_jRg",
         "pub_time": "Thu, 27 Feb 2025 13:58:47 +0000"
       }
     },
