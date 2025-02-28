@@ -98,7 +98,6 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./main/web/public
         keep_files: true
-        enable_jekyll: true  # 启用 Jekyll 处理
     
     - name: Debug Info
       run: |

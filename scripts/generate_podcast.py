@@ -587,152 +587,88 @@ class PodcastGenerator:
         return dt.strftime('%Y年%m月%d日 %H:%M')
 
     async def generate_final_summary(self, summaries: List[Dict], timestamp: str) -> str:
-        """生成最终的汇总摘要和播报稿"""
         try:
             podcast_dir = os.path.join(self.podcasts_dir, timestamp)
-            summary_file = os.path.join(podcast_dir, 'summary.md')
+            summary_file = os.path.join(podcast_dir, 'summary.html')  # 改为 .html
             articles_file = os.path.join(podcast_dir, 'articles.md')
             script_file = os.path.join(podcast_dir, 'script.md')
             
-            # 保存总结和原文
-            with open(summary_file, 'w', encoding='utf-8') as f_summary, \
-                 open(articles_file, 'w', encoding='utf-8') as f_articles:
-                
-                # 写入 summary.md
-                f_summary.write("""---
-layout: default
-title: 出版行业新闻总结
----
-
-<style>
-h1 { 
-    color: #2c3e50;
-    border-bottom: 2px solid #3498db;
-    padding-bottom: 10px;
-}
-h2 { 
-    color: #34495e;
-    margin-top: 30px;
-}
-.meta-info {
-    color: #7f8c8d;
-    font-size: 0.9em;
-    margin-bottom: 15px;
-}
-.article-link {
-    color: #3498db;
-    text-decoration: none;
-}
-.article-link:hover {
-    text-decoration: underline;
-}
-.divider {
-    border-top: 1px solid #eee;
-    margin: 30px 0;
-}
-</style>
-
+            # 保存总结
+            with open(summary_file, 'w', encoding='utf-8') as f_summary:
+                # 写入完整的 HTML 结构
+                f_summary.write("""<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>出版行业新闻总结</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 { 
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 { 
+            color: #34495e;
+            margin-top: 30px;
+        }
+        .meta-info {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .article-link {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .article-link:hover {
+            text-decoration: underline;
+        }
+        .divider {
+            border-top: 1px solid #eee;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+<h1>出版行业新闻总结</h1>
 """)
                 
-                f_summary.write("# 出版行业新闻总结\n\n")
-                f_articles.write("# 出版行业新闻原文\n\n")
-                
+                # 写入文章内容
                 for i, s in enumerate(summaries, 1):
                     formatted_time = self.format_datetime(s['pub_time'])
                     
-                    # 写入 summary.md
-                    f_summary.write(f"## {s['title']}\n\n")
+                    f_summary.write(f"<h2>{s['title']}</h2>\n")
                     f_summary.write('<div class="meta-info">\n')
-                    f_summary.write(f"来源：{s['source']}  \n")
-                    f_summary.write(f"发布时间：{formatted_time}  \n")
-                    f_summary.write(f"<a href='{s['link']}' class='article-link' target='_blank'>阅读原文</a>\n")
-                    f_summary.write('</div>\n\n')
-                    f_summary.write(f"{s['summary']}\n\n")
-                    f_summary.write('<div class="divider"></div>\n\n')
+                    f_summary.write(f"来源：{s['source']}<br>\n")
+                    f_summary.write(f"发布时间：{formatted_time}<br>\n")
+                    f_summary.write(f'<a href="{s["link"]}" class="article-link" target="_blank">阅读原文</a>\n')
+                    f_summary.write('</div>\n')
                     
-                    # 写入 articles.md
-                    f_articles.write(f"## {s['title']}\n\n")
-                    f_articles.write(f"来源：{s['source']}  \n")
-                    f_articles.write(f"发布时间：{formatted_time}  \n")
-                    f_articles.write(f"原文链接：{s['link']}  \n\n")
-                    f_articles.write(f"{s.get('content', '未获取到原文')}\n\n")
-                    f_articles.write("---\n\n")
-            
-            # 生成播报稿
-            article_count = len(summaries)
-            input_text = "\n\n".join([
-                f"文章{i+1}:\n标题: {s['title']}\n来源: {s['source']}\n总结:\n{s['summary']}"
-                for i, s in enumerate(summaries)
-            ])
-            
-            prompt = f"""你是出版电台的主播，需要将以下{article_count}篇文章整理成适合朗读的播报内容。
+                    # 将换行符转换为 HTML 段落
+                    paragraphs = s['summary'].split('\n\n')
+                    for p in paragraphs:
+                        if p.strip():
+                            f_summary.write(f"<p>{p}</p>\n")
+                    
+                    f_summary.write('<div class="divider"></div>\n')
+                
+                f_summary.write("</body></html>")
 
-内容材料：
-{input_text}
-
-要求：
-1. 开场语固定为："各位听众，这里是出版电台。今天我们为您带来出版行业的最新资讯。点击音频左下角的"查看文稿"，您可以获取本播报涉及的所有文章原文以及内容总结。
-2. 每篇文章的播报需包含：
-   - 以自然、亲切的方式介绍文章标题和来源（如"今天我们先来看一篇来自XX的文章，标题是……"）
-   - 核心观点和关键信息（200-300字），语气生动，突出有趣细节
-   - 销量或营销亮点（如果内容中有），用引导性语言呈现（如"值得一提的是……"）
-3. 文章之间使用自然过渡语连接（如"接下来"、"另外"、"让我们转向"），保持流畅
-4. 使用播音腔语气，正式但不呆板，适当加入提问或引导（如"你知道吗？"、"这意味着什么呢？"）以吸引听众
-5. 通过语气和停顿来控制节奏，不要在文本中加入任何控制词（如"稍停"、"停顿"等）
-6. 结尾固定为："感谢收听出版电台，我们下期再见。"
-7. 不要使用等*、#、--等不能朗读的符号，确保文本适合直接朗读
-8. 必须处理所有提供的文章
-9. 结尾要加上"如果您喜欢本节目，请点击分享。"
-
-
-请直接输出播报内容。
-"""
-
-            headers = {
-                "Authorization": f"Bearer {self.api_key}",
-                "Content-Type": "application/json"
-            }
-
-            # 生成播报稿
-            async with aiohttp.ClientSession() as session:
-                async with session.post(
-                    self.api_base,
-                    headers=headers,
-                    json={
-                        "model": "google/gemini-2.0-flash-001",
-                        "messages": [{"role": "user", "content": prompt}]
-                    },
-                    timeout=180
-                ) as response:
-                    result = await response.json()
-                    if 'choices' in result:
-                        broadcast_script = result["choices"][0]["message"]["content"].strip()
-                    elif 'response' in result:
-                        broadcast_script = result["response"].strip()
-                    else:
-                        print(f"API响应格式异常: {result}")
-                        return None
-
-            # 保存播报稿
-            with open(script_file, 'w', encoding='utf-8') as f:
-                f.write(broadcast_script)
-
-            # 生成音频
-            audio_file = await self.generate_audio(broadcast_script, timestamp)
-            if not audio_file:
-                print("音频生成失败")
-                audio_path = None
-            else:
-                print(f"音频生成成功: {audio_file}")
-                audio_path = f'./podcasts/{timestamp}/podcast.mp3'
-
-            # 更新索引
+            # 更新索引中的文件路径
             podcast_data = {
                 'id': timestamp,
                 'date': datetime.now().strftime('%Y-%m-%d'),
                 'title': f"出版电台播报 {datetime.now().strftime('%Y年%m月%d日')}",
-                'summary_path': f'./podcasts/{timestamp}/summary.md',
-                'audio_path': audio_path,  # 添加音频路径
+                'summary_path': f'./podcasts/{timestamp}/summary.html',  # 改为 .html
+                'audio_path': audio_path,
             }
             self.update_podcast_index(podcast_data)
             
