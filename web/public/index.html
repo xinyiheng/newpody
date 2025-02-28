@@ -202,6 +202,13 @@
             }
         });
 
+        function fixPath(path) {
+            if (path && path.startsWith('./')) {
+                return path.substring(2);
+            }
+            return path;
+        }
+
         async function loadPodcasts() {
             try {
                 console.log('当前页面URL:', window.location.href);
@@ -226,17 +233,17 @@
                     clone.querySelector('h2').textContent = podcast.title;
                     clone.querySelector('.text-gray-900').textContent = podcast.highlight;
                     
-                    // 修改音频源设置
+                    // 修改音频源设置 - 使用 fixPath 函数处理路径
                     const audioElement = clone.querySelector('audio');
                     const sourceElement = audioElement.querySelector('source');
-                    sourceElement.src = './' + podcast.audio_path;
+                    sourceElement.src = fixPath(podcast.audio_path);
                     sourceElement.type = 'audio/mpeg';
                     
                     const container = document.createElement('div');
                     container.appendChild(clone);
                     const element = container.firstElementChild;
 
-                    // 修改为异步加载文稿
+                    // 修改为异步加载文稿 - 使用 fixPath 函数处理路径
                     element.querySelector('.view-script').addEventListener('click', async () => {
                         try {
                             // 显示加载状态
@@ -249,7 +256,15 @@
                             modal.classList.add('show');
                             document.body.classList.add('modal-open');
 
-                            const scriptResponse = await fetch('./' + podcast.script_path);
+                            // 使用 fixPath 函数处理路径
+                            const scriptPath = fixPath(podcast.transcript_path);
+                            console.log('尝试加载文稿路径:', scriptPath);
+                            
+                            const scriptResponse = await fetch(scriptPath);
+                            if (!scriptResponse.ok) {
+                                throw new Error(`HTTP error! status: ${scriptResponse.status}`);
+                            }
+                            
                             const scriptContent = await scriptResponse.text();
                             modalTitle.textContent = podcast.title;
                             
@@ -281,7 +296,14 @@
                             modalContent.innerHTML = '';
                             modalContent.appendChild(fragment);
                         } catch (error) {
-                            console.error('加载文稿失败:', error);
+                            console.error('加载文稿失败:', error, '路径:', podcast.transcript_path);
+                            modalContent.innerHTML = `
+                                <div class="p-4 text-red-600">
+                                    <p>加载文稿失败</p>
+                                    <p class="text-sm mt-2">错误信息: ${error.message}</p>
+                                    <p class="text-sm mt-2">尝试路径: ${podcast.transcript_path}</p>
+                                </div>
+                            `;
                         }
                     });
 
