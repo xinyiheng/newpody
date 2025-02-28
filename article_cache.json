@@ -1010,6 +1010,17 @@
         "link": "https://mp.weixin.qq.com/s/_NFzhjQ45xtjWUsMK7Rh8A",
         "pub_time": "Thu, 27 Feb 2025 14:04:50 +0000"
       }
+    },
+    "https://mp.weixin.qq.com/s/OTgBrHmhG3TjZfEEzEnjaw": {
+      "timestamp": "2025-02-28 10:12:36",
+      "data": {
+        "title": "国内首部deepseek教程书！",
+        "author": "未知作者",
+        "source": "人民邮电出版社",
+        "link": "https://mp.weixin.qq.com/s/OTgBrHmhG3TjZfEEzEnjaw",
+        "pub_time": "Thu, 27 Feb 2025 14:03:23 +0000"
+      },
+      "filter_reason": "fetch_failed"
     }
   }
 }
