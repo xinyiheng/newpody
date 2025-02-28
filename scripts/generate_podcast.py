@@ -141,8 +141,8 @@ class PodcastGenerator:
                 'id': podcast_data['id'],
                 'date': podcast_data['date'],
                 'title': podcast_data['title'],
-                'transcript_path': f'podcasts/{podcast_data["id"]}/summary.txt',  # 使用统一的路径格式
-                'audio_path': podcast_data.get('audio_path'),  # 直接使用传入的路径
+                'transcript_path': f'./podcasts/{podcast_data["id"]}/summary.txt',  # 保持 ./ 前缀
+                'audio_path': podcast_data.get('audio_path'),  # 使用传入的路径
             }
             
             # 添加新播客信息到列表开头
@@ -691,15 +691,15 @@ class PodcastGenerator:
                 audio_path = None
             else:
                 print(f"音频生成成功: {audio_file}")
-                audio_path = f'podcasts/{timestamp}/podcast.mp3'
+                audio_path = f'./podcasts/{timestamp}/podcast.mp3'
 
             # 更新索引
             podcast_data = {
                 'id': timestamp,
                 'date': datetime.now().strftime('%Y-%m-%d'),
                 'title': f"出版电台播报 {datetime.now().strftime('%Y年%m月%d日')}",
-                'summary_path': f'podcasts/{timestamp}/summary.txt',  # 移除开头的 ./
-                'audio_path': f'podcasts/{timestamp}/podcast.mp3',  # 移除开头的 ./
+                'summary_path': f'./podcasts/{timestamp}/summary.txt',  # 保持 ./ 前缀
+                'audio_path': f'./podcasts/{timestamp}/podcast.mp3',  # 保持 ./ 前缀
             }
             self.update_podcast_index(podcast_data)
             
