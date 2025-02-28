@@ -187,8 +187,8 @@ jobs:
           echo "当前 podcast_index.json 内容片段:"
           head -20 podcast_index.json
           
-          # 使用 Python 脚本根据播客内容生成副标题
-          python3 -c "
+          # 创建 Python 脚本
+          cat > generate_highlights.py << 'EOF'
 import json
 import os
 import random
@@ -288,21 +288,24 @@ with open('podcast_index.json', 'w', encoding='utf-8') as f:
     json.dump(data, f, ensure_ascii=False, indent=2)
 
 print('已根据播客内容生成副标题')
-"
-      
-      # 显示修改后的内容
-      echo "修改后的 podcast_index.json 内容片段:"
-      head -20 podcast_index.json
-      
-      # 直接部署到 gh-pages 分支
-      echo "复制 podcast_index.json 到 gh-pages 分支..."
-      cp podcast_index.json ../../../gh-pages/
-      cd ../../../gh-pages
-      git config --local user.email "action@github.com"
-      git config --local user.name "GitHub Action"
-      git add podcast_index.json
-      git commit -m "Add content-based highlights to podcasts" || echo "No changes to commit"
-      git push origin gh-pages || echo "No changes to push"
+EOF
+          
+          # 运行 Python 脚本
+          python3 generate_highlights.py
+          
+          # 显示修改后的内容
+          echo "修改后的 podcast_index.json 内容片段:"
+          head -20 podcast_index.json
+          
+          # 直接部署到 gh-pages 分支
+          echo "复制 podcast_index.json 到 gh-pages 分支..."
+          cp podcast_index.json ../../../gh-pages/
+          cd ../../../gh-pages
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add podcast_index.json
+          git commit -m "Add content-based highlights to podcasts" || echo "No changes to commit"
+          git push origin gh-pages || echo "No changes to push"
         else
           echo "podcast_index.json 文件不存在，跳过"
         fi
