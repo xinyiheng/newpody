@@ -184,12 +184,6 @@
     </template>
 
     <script>
-    function fixPath(path) {
-        if (path && path.startsWith("./")) {
-            return path.substring(2);
-        }
-        return path;
-    }
         const modal = document.getElementById('scriptModal');
         const modalTitle = document.getElementById('modalTitle');
         const modalContent = document.getElementById('modalContent');
@@ -264,7 +258,6 @@
 
                             // 使用 fixPath 函数处理路径
                             const scriptPath = fixPath(podcast.transcript_path);
-            console.log("尝试加载文稿路径:", scriptPath);
                             console.log('尝试加载文稿路径:', scriptPath);
                             
                             const scriptResponse = await fetch(scriptPath);
