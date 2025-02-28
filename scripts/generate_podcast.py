@@ -589,7 +589,7 @@ class PodcastGenerator:
     async def generate_final_summary(self, summaries: List[Dict], timestamp: str) -> str:
         try:
             podcast_dir = os.path.join(self.podcasts_dir, timestamp)
-            summary_file = os.path.join(podcast_dir, 'summary.html')  # 改为 .html
+            summary_file = os.path.join(podcast_dir, 'summary.html')
             articles_file = os.path.join(podcast_dir, 'articles.md')
             script_file = os.path.join(podcast_dir, 'script.md')
             
@@ -662,13 +662,46 @@ class PodcastGenerator:
                 
                 f_summary.write("</body></html>")
 
+            # 生成播报稿
+            async with aiohttp.ClientSession() as session:
+                async with session.post(
+                    self.api_base,
+                    headers=headers,
+                    json={
+                        "model": "google/gemini-2.0-flash-001",
+                        "messages": [{"role": "user", "content": prompt}]
+                    },
+                    timeout=180
+                ) as response:
+                    result = await response.json()
+                    if 'choices' in result:
+                        broadcast_script = result["choices"][0]["message"]["content"].strip()
+                    elif 'response' in result:
+                        broadcast_script = result["response"].strip()
+                    else:
+                        print(f"API响应格式异常: {result}")
+                        return None
+
+            # 保存播报稿
+            with open(script_file, 'w', encoding='utf-8') as f:
+                f.write(broadcast_script)
+
+            # 生成音频
+            audio_file = await self.generate_audio(broadcast_script, timestamp)
+            if not audio_file:
+                print("音频生成失败")
+                audio_path = None
+            else:
+                print(f"音频生成成功: {audio_file}")
+                audio_path = f'./podcasts/{timestamp}/podcast.mp3'
+
             # 更新索引中的文件路径
             podcast_data = {
                 'id': timestamp,
                 'date': datetime.now().strftime('%Y-%m-%d'),
                 'title': f"出版电台播报 {datetime.now().strftime('%Y年%m月%d日')}",
-                'summary_path': f'./podcasts/{timestamp}/summary.html',  # 改为 .html
-                'audio_path': audio_path,
+                'summary_path': f'./podcasts/{timestamp}/summary.html',
+                'audio_path': audio_path,  # 现在 audio_path 已经定义
             }
             self.update_podcast_index(podcast_data)
             
