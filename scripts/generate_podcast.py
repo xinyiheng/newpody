@@ -141,14 +141,10 @@ class PodcastGenerator:
                 'id': podcast_data['id'],
                 'date': podcast_data['date'],
                 'title': podcast_data['title'],
-                'summary_path': podcast_data['summary_path'],  # 使用 summary_path 而不是 transcript_path
-                'script_path': f'./podcasts/{podcast_data["id"]}/script.txt',  # 添加播报稿路径
+                'transcript_path': f'./podcasts/{podcast_data["id"]}/summary.txt',  # 使用 summary.txt 作为文稿
+                'audio_path': podcast_data.get('audio_path'),
             }
             
-            # 如果有音频路径，添加到数据中
-            if podcast_data.get('audio_path'):
-                new_podcast['audio_path'] = podcast_data['audio_path']
-
             # 添加新播客信息到列表开头
             index['podcasts'].insert(0, new_podcast)
             
@@ -702,8 +698,8 @@ class PodcastGenerator:
                 'id': timestamp,
                 'date': datetime.now().strftime('%Y-%m-%d'),
                 'title': f"出版电台播报 {datetime.now().strftime('%Y年%m月%d日')}",
-                'summary_path': f'./podcasts/{timestamp}/summary.txt',  # 文稿路径
-                'audio_path': audio_path,  # 音频路径
+                'summary_path': f'./podcasts/{timestamp}/summary.txt',  # 这个路径应该和 transcript_path 一致
+                'audio_path': audio_path,
             }
             self.update_podcast_index(podcast_data)
             
