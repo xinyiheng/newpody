@@ -146,3 +146,28 @@ jobs:
         echo "GitHub event: ${{ github.event_name }}"
         echo "Trigger type: ${{ github.event.schedule || 'manual' }}"
         echo "Generation status: ${{ steps.generate.outcome }}"
+
+    - name: Update index.html to display highlights
+      run: |
+        echo "更新 index.html 以显示副标题..."
+        cd gh-pages
+        
+        # 确保 index.html 中有显示副标题的代码
+        if ! grep -q "podcast.highlight" index.html; then
+          # 在标题后添加副标题显示
+          sed -i 's/<h2 class="text-xl font-semibold"><\/h2>/<h2 class="text-xl font-semibold"><\/h2>\n                    <p class="text-gray-600 italic mt-1 text-sm highlight-text"><\/p>/' index.html
+          
+          # 添加设置副标题的代码
+          sed -i 's/clone.querySelector("h2").textContent = podcast.title;/clone.querySelector("h2").textContent = podcast.title;\n                    clone.querySelector(".highlight-text").textContent = podcast.highlight || "探索出版行业的最新动态";/' index.html
+          
+          echo "已更新 index.html 以显示副标题"
+          
+          # 提交更改
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add index.html
+          git commit -m "Add highlight display to index.html" || echo "No changes to commit"
+          git push origin gh-pages || echo "No changes to push"
+        else
+          echo "index.html 已包含副标题显示代码，无需更新"
+        fi

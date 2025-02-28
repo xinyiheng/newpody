@@ -655,14 +655,36 @@ class PodcastGenerator:
 请直接输出播报内容。
 """
 
+            # 生成吸引人的副标题
+            highlight_prompt = f"""根据以下{article_count}篇出版行业文章的摘要，生成一个简短、吸引人的副标题（15-25字），突出本期播客的亮点或主题。
+
+文章摘要：
+{input_text}
+
+要求：
+1. 副标题应该简洁有力，15-25字为宜
+2. 使用吸引人的词汇，引发听众兴趣
+3. 可以使用问句或感叹句增加吸引力
+4. 突出本期内容的独特价值或亮点
+5. 不要使用"本期""播客""节目"等词语
+6. 直接输出副标题，不要有任何解释或其他内容
+
+副标题示例：
+- "畅销书背后的营销秘密大揭秘！"
+- "数字化浪潮下的出版业新机遇"
+- "重磅新书来袭，哪本值得一读？"
+- "从经典到畅销，好书如何炼成？"
+"""
+
             headers = {
                 "Authorization": f"Bearer {self.api_key}",
                 "Content-Type": "application/json"
             }
 
-            # 生成播报稿
+            # 并行生成播报稿和副标题
             async with aiohttp.ClientSession() as session:
-                async with session.post(
+                # 生成播报稿
+                broadcast_task = session.post(
                     self.api_base,
                     headers=headers,
                     json={
@@ -670,15 +692,43 @@ class PodcastGenerator:
                         "messages": [{"role": "user", "content": prompt}]
                     },
                     timeout=180
-                ) as response:
-                    result = await response.json()
-                    if 'choices' in result:
-                        broadcast_script = result["choices"][0]["message"]["content"].strip()
-                    elif 'response' in result:
-                        broadcast_script = result["response"].strip()
-                    else:
-                        print(f"API响应格式异常: {result}")
-                        return None
+                )
+                
+                # 生成副标题
+                highlight_task = session.post(
+                    self.api_base,
+                    headers=headers,
+                    json={
+                        "model": "google/gemini-2.0-flash-001",
+                        "messages": [{"role": "user", "content": highlight_prompt}]
+                    },
+                    timeout=60
+                )
+                
+                # 等待两个任务完成
+                broadcast_response, highlight_response = await asyncio.gather(
+                    broadcast_task, highlight_task
+                )
+                
+                # 处理播报稿结果
+                broadcast_result = await broadcast_response.json()
+                if 'choices' in broadcast_result:
+                    broadcast_script = broadcast_result["choices"][0]["message"]["content"].strip()
+                elif 'response' in broadcast_result:
+                    broadcast_script = broadcast_result["response"].strip()
+                else:
+                    print(f"API响应格式异常: {broadcast_result}")
+                    return None
+                
+                # 处理副标题结果
+                highlight_result = await highlight_response.json()
+                if 'choices' in highlight_result:
+                    highlight = highlight_result["choices"][0]["message"]["content"].strip()
+                elif 'response' in highlight_result:
+                    highlight = highlight_result["response"].strip()
+                else:
+                    print(f"API响应格式异常: {highlight_result}")
+                    highlight = "探索出版行业的最新动态，聆听行业专家的深度解析"
 
             # 保存播报稿
             with open(script_file, 'w', encoding='utf-8') as f:
@@ -699,7 +749,8 @@ class PodcastGenerator:
                 'date': datetime.now().strftime('%Y-%m-%d'),
                 'title': f"出版电台播报 {datetime.now().strftime('%Y年%m月%d日')}",
                 'transcript_path': f'./podcasts/{timestamp}/summary.txt',  # 保持 ./ 前缀
-                'audio_path': f'./podcasts/{timestamp}/podcast.mp3',  # 保持 ./ 前缀
+                'audio_path': audio_path,  # 保持 ./ 前缀
+                'highlight': highlight  # 添加吸引人的副标题
             }
             self.update_podcast_index(podcast_data)
             
@@ -707,6 +758,8 @@ class PodcastGenerator:
 
         except Exception as e:
             print(f"生成播报稿失败: {e}")
+            import traceback
+            print(traceback.format_exc())
             return None
 
 async def main():
