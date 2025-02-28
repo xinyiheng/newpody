@@ -41,111 +41,33 @@ jobs:
 
     - name: Install dependencies
       run: |
+        cd main
         python -m pip install --upgrade pip
-        pip install -r main/requirements.txt
-    
-    - name: Copy existing podcasts
-      run: |
-        if [ -d "gh-pages/podcasts" ]; then
-          mkdir -p main/web/public/podcasts
-          cp -r gh-pages/podcasts/* main/web/public/podcasts/
-        fi
-        if [ -f "gh-pages/podcast_index.json" ]; then
-          cp gh-pages/podcast_index.json main/web/public/
-        fi
+        pip install -r requirements.txt
+        pip install httpx ormsgpack pydantic
 
     - name: Generate podcast
-      id: generate
-      run: |
-        cd main
-        pwd
-        ls -la
-        python scripts/generate_podcast.py
       env:
         API_KEY: ${{ secrets.API_KEY }}
         FISH_API_KEY: ${{ secrets.FISH_API_KEY }}
-      continue-on-error: true
-
-    # 添加提交缓存文件的步骤
-    - name: Commit cache file
-      if: steps.generate.outcome == 'success'
       run: |
         cd main
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add article_cache.json
-        git commit -m "Update article cache" || echo "No changes to commit"
-        git push origin main || echo "No changes to push"
-
-    - name: Send notification on failure
-      if: steps.generate.outcome == 'failure'
-      uses: actions/github-script@v6
-      with:
-        script: |
-          github.rest.issues.create({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            title: 'Podcast generation failed',
-            body: `Workflow run: ${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`
-          })
-    
-    - name: Check files before deploy
-      run: |
-        echo "Checking files in public directory..."
-        cd main/web/public
-        ls -la
-        echo "Checking podcasts directory..."
-        ls -la podcasts || echo "podcasts directory not found"
-        echo "Checking latest podcast..."
-        ls -la podcasts/$(ls -t podcasts | head -n1) || echo "No podcasts found"
-
-    - name: Fix index.html in gh-pages
-      run: |
-        echo "修复 gh-pages 分支中的 index.html 文件..."
-        cd gh-pages
-        
-        # 添加 fixPath 函数到 index.html
-        sed -i '/const modal = document.getElementById/i \
-            function fixPath(path) {\
-                if (path && path.startsWith("./")) {\
-                    return path.substring(2);\
-                }\
-                return path;\
-            }' index.html
-        
-        # 修改音频源设置，使用 fixPath 函数
-        sed -i 's/sourceElement.src = podcast.audio_path;/sourceElement.src = fixPath(podcast.audio_path);/' index.html
-        
-        # 修改文稿加载，使用 fixPath 函数
-        sed -i '/const scriptPath = podcast.transcript_path;/c \            const scriptPath = fixPath(podcast.transcript_path);' index.html
-        
-        # 添加调试日志
-        sed -i '/const scriptPath = fixPath/a \            console.log("尝试加载文稿路径:", scriptPath);' index.html
-        
-        echo "修复完成，准备提交更改..."
-        
-        # 提交更改
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add index.html
-        git commit -m "Fix path handling in index.html" || echo "No changes to commit"
-        git push origin gh-pages || echo "No changes to push"
+        python scripts/generate_podcast.py
 
     - name: Deploy to GitHub Pages
-      if: steps.generate.outcome == 'success'
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./main/web/public
-        keep_files: true
-    
-    - name: Debug Info
       run: |
-        echo "Current time: $(date)"
-        echo "Current UTC time: $(date -u)"
-        echo "GitHub event: ${{ github.event_name }}"
-        echo "Trigger type: ${{ github.event.schedule || 'manual' }}"
-        echo "Generation status: ${{ steps.generate.outcome }}"
+        # 复制生成的播客文件到 gh-pages 分支
+        echo "复制播客文件到 gh-pages 分支..."
+        cp -r main/web/public/podcasts/* gh-pages/podcasts/
+        cp main/web/public/podcast_index.json gh-pages/
+        
+        # 提交更改
+        cd gh-pages
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git commit -m "Update podcast content" || echo "No changes to commit"
+        git push origin gh-pages || echo "No changes to push"
 
     - name: Update index.html to display highlights
       run: |
@@ -170,142 +92,4 @@ jobs:
           git push origin gh-pages || echo "No changes to push"
         else
           echo "index.html 已包含副标题显示代码，无需更新"
-        fi
-
-    - name: Generate content-based highlights for podcasts
-      run: |
-        echo "根据播客内容生成副标题..."
-        cd main/web/public
-        
-        # 检查 podcast_index.json 是否存在
-        if [ -f "podcast_index.json" ]; then
-          # 安装必要的工具
-          sudo apt-get update && sudo apt-get install -y jq python3-pip
-          pip install requests beautifulsoup4
-          
-          # 显示当前 podcast_index.json 内容片段
-          echo "当前 podcast_index.json 内容片段:"
-          head -20 podcast_index.json
-          
-          # 创建 Python 脚本
-          cat > generate_highlights.py << 'EOF'
-import json
-import os
-import random
-import requests
-from bs4 import BeautifulSoup
-
-# 读取 podcast_index.json
-with open('podcast_index.json', 'r', encoding='utf-8') as f:
-    data = json.load(f)
-
-# 处理每个播客
-for podcast in data['podcasts']:
-    # 获取文稿路径
-    transcript_path = podcast.get('transcript_path', '')
-    if not transcript_path:
-        continue
-        
-    # 移除路径中的 ./ 前缀
-    if transcript_path.startswith('./'):
-        transcript_path = transcript_path[2:]
-    
-    # 构建完整路径
-    full_path = os.path.join('.', transcript_path)
-    
-    # 检查文件是否存在
-    if not os.path.exists(full_path):
-        print(f'文件不存在: {full_path}')
-        continue
-    
-    try:
-        # 读取文稿内容
-        with open(full_path, 'r', encoding='utf-8') as f:
-            content = f.read()
-        
-        # 提取文章标题
-        titles = []
-        for line in content.split('\n'):
-            if line.startswith('标题：'):
-                title = line.replace('标题：', '').strip()
-                if title:
-                    titles.append(title)
-        
-        # 如果找到标题，生成副标题
-        if titles:
-            # 选择最有吸引力的标题关键词
-            keywords = []
-            for title in titles:
-                # 分词并提取关键词
-                words = title.split()
-                for word in words:
-                    if len(word) > 1 and word not in ['的', '了', '和', '与', '在', '是', '有', '为']:
-                        keywords.append(word)
-            
-            # 如果有关键词，生成副标题
-            if keywords:
-                # 选择3-5个不重复的关键词
-                selected_keywords = []
-                while len(selected_keywords) < min(5, len(keywords)) and keywords:
-                    keyword = random.choice(keywords)
-                    if keyword not in selected_keywords:
-                        selected_keywords.append(keyword)
-                        keywords.remove(keyword)
-                
-                # 生成副标题模板
-                templates = [
-                    '重磅！{kw1}+{kw2}引爆出版圈，{kw3}成新趋势',
-                    '{kw1}如何改变出版业？{kw2}与{kw3}的碰撞',
-                    '独家解析：{kw1}背后的{kw2}，{kw3}成关键',
-                    '出版热点：从{kw1}到{kw2}，{kw3}引领未来',
-                    '{kw1}引领阅读新风向，{kw2}成为焦点',
-                    '深度剖析：{kw1}如何影响{kw2}，{kw3}是关键',
-                    '行业变革！{kw1}与{kw2}融合，{kw3}成新机遇'
-                ]
-                
-                # 随机选择一个模板
-                template = random.choice(templates)
-                
-                # 填充关键词
-                highlight = template.format(
-                    kw1=selected_keywords[0] if len(selected_keywords) > 0 else '出版',
-                    kw2=selected_keywords[1] if len(selected_keywords) > 1 else '阅读',
-                    kw3=selected_keywords[2] if len(selected_keywords) > 2 else '创新'
-                )
-                
-                # 设置副标题
-                podcast['highlight'] = highlight
-            else:
-                podcast['highlight'] = '探索出版行业的最新动态，聆听行业专家的深度解析'
-        else:
-            podcast['highlight'] = '探索出版行业的最新动态，聆听行业专家的深度解析'
-    except Exception as e:
-        print(f'处理文稿时出错: {e}')
-        podcast['highlight'] = '探索出版行业的最新动态，聆听行业专家的深度解析'
-
-# 保存修改后的文件
-with open('podcast_index.json', 'w', encoding='utf-8') as f:
-    json.dump(data, f, ensure_ascii=False, indent=2)
-
-print('已根据播客内容生成副标题')
-EOF
-          
-          # 运行 Python 脚本
-          python3 generate_highlights.py
-          
-          # 显示修改后的内容
-          echo "修改后的 podcast_index.json 内容片段:"
-          head -20 podcast_index.json
-          
-          # 直接部署到 gh-pages 分支
-          echo "复制 podcast_index.json 到 gh-pages 分支..."
-          cp podcast_index.json ../../../gh-pages/
-          cd ../../../gh-pages
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add podcast_index.json
-          git commit -m "Add content-based highlights to podcasts" || echo "No changes to commit"
-          git push origin gh-pages || echo "No changes to push"
-        else
-          echo "podcast_index.json 文件不存在，跳过"
         fi
