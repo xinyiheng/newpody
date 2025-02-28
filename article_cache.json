@@ -434,16 +434,6 @@
       },
       "filter_reason": "标题包含关键词: 招募"
     },
-    "https://mp.weixin.qq.com/s/c0zOg8PKXdfg36BSRJ7vrQ": {
-      "timestamp": "2025-02-28 07:40:29",
-      "data": {
-        "title": "巴菲特2025致股东信：如何实现60年5万倍增长？",
-        "author": "未知作者",
-        "source": "中信书院",
-        "link": "https://mp.weixin.qq.com/s/c0zOg8PKXdfg36BSRJ7vrQ",
-        "pub_time": "Thu, 27 Feb 2025 13:58:30 +0000"
-      }
-    },
     "https://mp.weixin.qq.com/s/7daAzd1-SMtVy1pIkTEoAA": {
       "timestamp": "2025-02-28 07:40:33",
       "data": {
@@ -1020,6 +1010,16 @@
         "source": "湛庐阅读",
         "link": "https://mp.weixin.qq.com/s/dLPVZ373qDGiE4dq01sfhA",
         "pub_time": "Wed, 26 Feb 2025 20:54:19 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/c0zOg8PKXdfg36BSRJ7vrQ": {
+      "timestamp": "2025-02-28 08:50:40",
+      "data": {
+        "title": "巴菲特2025致股东信：如何实现60年5万倍增长？",
+        "author": "未知作者",
+        "source": "中信书院",
+        "link": "https://mp.weixin.qq.com/s/c0zOg8PKXdfg36BSRJ7vrQ",
+        "pub_time": "Thu, 27 Feb 2025 13:58:30 +0000"
       }
     }
   }
