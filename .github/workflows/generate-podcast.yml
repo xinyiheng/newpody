@@ -198,9 +198,10 @@ jobs:
             echo "修改后的 podcast_index.json 内容片段:"
             head -20 podcast_index.json
             
-            # 直接部署到 gh-pages 分支
-            cp podcast_index.json ../../gh-pages/
-            cd ../../gh-pages
+            # 直接部署到 gh-pages 分支 - 修复路径问题
+            echo "复制 podcast_index.json 到 gh-pages 分支..."
+            cp podcast_index.json ../../../gh-pages/
+            cd ../../../gh-pages
             git config --local user.email "action@github.com"
             git config --local user.name "GitHub Action"
             git add podcast_index.json
