@@ -53,7 +53,9 @@ jobs:
         if [ -f "gh-pages/podcast_index.json" ]; then
           cp gh-pages/podcast_index.json main/web/public/
         fi
-    
+        # 复制 Jekyll 配置文件
+        cp main/_config.yml main/web/public/
+
     - name: Generate podcast
       id: generate
       run: |
@@ -96,6 +98,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./main/web/public
         keep_files: true
+        enable_jekyll: true  # 启用 Jekyll 处理
     
     - name: Debug Info
       run: |

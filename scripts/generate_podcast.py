@@ -600,7 +600,7 @@ class PodcastGenerator:
                 
                 # 写入 summary.md
                 f_summary.write("""---
-layout: post
+layout: default
 title: 出版行业新闻总结
 ---
 
