@@ -99,6 +99,38 @@ jobs:
         echo "Checking latest podcast..."
         ls -la podcasts/$(ls -t podcasts | head -n1) || echo "No podcasts found"
 
+    - name: Fix index.html in gh-pages
+      run: |
+        echo "修复 gh-pages 分支中的 index.html 文件..."
+        cd gh-pages
+        
+        # 添加 fixPath 函数到 index.html
+        sed -i '/const modal = document.getElementById/i \
+            function fixPath(path) {\
+                if (path && path.startsWith("./")) {\
+                    return path.substring(2);\
+                }\
+                return path;\
+            }' index.html
+        
+        # 修改音频源设置，使用 fixPath 函数
+        sed -i 's/sourceElement.src = podcast.audio_path;/sourceElement.src = fixPath(podcast.audio_path);/' index.html
+        
+        # 修改文稿加载，使用 fixPath 函数
+        sed -i '/const scriptPath = podcast.transcript_path;/c \            const scriptPath = fixPath(podcast.transcript_path);' index.html
+        
+        # 添加调试日志
+        sed -i '/const scriptPath = fixPath/a \            console.log("尝试加载文稿路径:", scriptPath);' index.html
+        
+        echo "修复完成，准备提交更改..."
+        
+        # 提交更改
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add index.html
+        git commit -m "Fix path handling in index.html" || echo "No changes to commit"
+        git push origin gh-pages || echo "No changes to push"
+
     - name: Deploy to GitHub Pages
       if: steps.generate.outcome == 'success'
       uses: peaceiris/actions-gh-pages@v3
