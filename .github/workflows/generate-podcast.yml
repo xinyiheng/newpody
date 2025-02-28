@@ -47,12 +47,24 @@ jobs:
         pip install httpx ormsgpack pydantic
 
     - name: Generate podcast
+      id: generate
       env:
         API_KEY: ${{ secrets.API_KEY }}
         FISH_API_KEY: ${{ secrets.FISH_API_KEY }}
       run: |
         cd main
         python scripts/generate_podcast.py
+
+    # 添加提交缓存文件的步骤
+    - name: Commit cache file
+      if: steps.generate.outcome == 'success'
+      run: |
+        cd main
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add article_cache.json
+        git commit -m "Update article cache" || echo "No changes to commit"
+        git push origin main || echo "No changes to push"
 
     - name: Deploy to GitHub Pages
       run: |
@@ -93,3 +105,25 @@ jobs:
         else
           echo "index.html 已包含副标题显示代码，无需更新"
         fi
+
+    - name: Send notification on failure
+      if: steps.generate.outcome == 'failure'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: 'Podcast generation failed',
+            body: `Workflow run: ${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`
+          })
+    
+    - name: Check files before deploy
+      run: |
+        echo "Checking files in public directory..."
+        cd main/web/public
+        ls -la
+        echo "Checking podcasts directory..."
+        ls -la podcasts || echo "podcasts directory not found"
+        echo "Checking latest podcast..."
+        ls -la podcasts/$(ls -t podcasts | head -n1) || echo "No podcasts found"
