@@ -176,7 +176,7 @@ class PodcastGenerator:
             
             request = ServeTTSRequest(
                 text=text,
-                reference_id="57eab548c7ed4ddc974c4c153cb015b2",
+                reference_id="74a543044a7b445696f6fc77a8aafa8d",
                 mp3_bitrate=192,
                 normalize=True,
                 latency="normal"
