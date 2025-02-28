@@ -171,3 +171,22 @@ jobs:
         else
           echo "index.html 已包含副标题显示代码，无需更新"
         fi
+
+    - name: Add default highlights to existing podcasts
+      run: |
+        echo "为现有播客添加默认副标题..."
+        cd main/web/public
+        
+        # 检查 podcast_index.json 是否存在
+        if [ -f "podcast_index.json" ]; then
+          # 安装 jq 工具
+          sudo apt-get update && sudo apt-get install -y jq
+          
+          # 为没有 highlight 字段的播客添加默认副标题
+          jq '.podcasts = [.podcasts[] | if .highlight == null then . + {"highlight": "探索出版行业的最新动态，聆听行业专家的深度解析"} else . end]' podcast_index.json > podcast_index.json.new
+          mv podcast_index.json.new podcast_index.json
+          
+          echo "已为现有播客添加默认副标题"
+        else
+          echo "podcast_index.json 文件不存在，跳过"
+        fi
