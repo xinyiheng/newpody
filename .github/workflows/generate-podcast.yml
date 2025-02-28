@@ -182,11 +182,33 @@ jobs:
           # 安装 jq 工具
           sudo apt-get update && sudo apt-get install -y jq
           
-          # 为没有 highlight 字段的播客添加默认副标题
-          jq '.podcasts = [.podcasts[] | if .highlight == null then . + {"highlight": "探索出版行业的最新动态，聆听行业专家的深度解析"} else . end]' podcast_index.json > podcast_index.json.new
-          mv podcast_index.json.new podcast_index.json
+          # 显示当前 podcast_index.json 内容
+          echo "当前 podcast_index.json 内容片段:"
+          head -20 podcast_index.json
           
-          echo "已为现有播客添加默认副标题"
+          # 使用更可靠的方式添加 highlight 字段
+          cat podcast_index.json | jq '.podcasts = [.podcasts[] | . + {"highlight": "探索出版行业的最新动态，聆听行业专家的深度解析"}]' > podcast_index.json.new
+          
+          # 检查新文件是否生成成功
+          if [ -f "podcast_index.json.new" ]; then
+            mv podcast_index.json.new podcast_index.json
+            echo "成功添加 highlight 字段"
+            
+            # 显示修改后的内容
+            echo "修改后的 podcast_index.json 内容片段:"
+            head -20 podcast_index.json
+            
+            # 直接部署到 gh-pages 分支
+            cp podcast_index.json ../../gh-pages/
+            cd ../../gh-pages
+            git config --local user.email "action@github.com"
+            git config --local user.name "GitHub Action"
+            git add podcast_index.json
+            git commit -m "Add highlight field to all podcasts" || echo "No changes to commit"
+            git push origin gh-pages || echo "No changes to push"
+          else
+            echo "生成新的 podcast_index.json 失败"
+          fi
         else
           echo "podcast_index.json 文件不存在，跳过"
         fi

@@ -143,7 +143,11 @@ class PodcastGenerator:
                 'title': podcast_data['title'],
                 'transcript_path': f'./podcasts/{podcast_data["id"]}/summary.txt',  # 保持 ./ 前缀
                 'audio_path': podcast_data.get('audio_path'),  # 使用传入的路径
+                'highlight': podcast_data.get('highlight', "探索出版行业的最新动态，聆听行业专家的深度解析")  # 添加副标题，如果没有则使用默认值
             }
+            
+            # 打印调试信息
+            print(f"新播客数据: {new_podcast}")
             
             # 添加新播客信息到列表开头
             index['podcasts'].insert(0, new_podcast)
