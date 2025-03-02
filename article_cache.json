@@ -2320,6 +2320,37 @@
         "link": "https://mp.weixin.qq.com/s/kb62r6oUpJI1p9e6a8Pd0A",
         "pub_time": "Sun, 02 Mar 2025 13:38:31 +0000"
       }
+    },
+    "https://mp.weixin.qq.com/s/QzkwEcWL08qli-4D2GAdVg": {
+      "timestamp": "2025-03-02 22:09:17",
+      "data": {
+        "title": "编辑手记：太宰治的文学，不止《人间失格》",
+        "author": "未知作者",
+        "source": "上海译文",
+        "link": "https://mp.weixin.qq.com/s/QzkwEcWL08qli-4D2GAdVg",
+        "pub_time": "Sun, 02 Mar 2025 21:21:58 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/FSumcuhICajn7xyiq4qb0A": {
+      "timestamp": "2025-03-02 22:09:21",
+      "data": {
+        "title": "马上预约｜2025好好读本书",
+        "author": "未知作者",
+        "source": "湛庐文化",
+        "link": "https://mp.weixin.qq.com/s/FSumcuhICajn7xyiq4qb0A",
+        "pub_time": "Sun, 02 Mar 2025 21:21:19 +0000"
+      },
+      "filter_reason": "fetch_failed"
+    },
+    "https://mp.weixin.qq.com/s/Yg7SUEYveBDpOvls8OQgJw": {
+      "timestamp": "2025-03-02 22:09:24",
+      "data": {
+        "title": "当AI接管“劳动”之后，我们终于可以做世界上最好的工作了",
+        "author": "未知作者",
+        "source": "湛庐文化",
+        "link": "https://mp.weixin.qq.com/s/Yg7SUEYveBDpOvls8OQgJw",
+        "pub_time": "Sun, 02 Mar 2025 21:21:19 +0000"
+      }
     }
   }
 }
