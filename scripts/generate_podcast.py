@@ -620,7 +620,7 @@ class PodcastGenerator:
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>出版行业新闻总结</title>
 </head>
-<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f8f5e6;">
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #fffbe6;">
     <div style="text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #ddd;">
         <h1 style="color: #2c3e50; text-align: center; margin-bottom: 20px;">出版行业新闻总结</h1>
         <p>今天总结了 """ + str(len(summaries)) + """ 篇文章</p>
@@ -663,8 +663,8 @@ class PodcastGenerator:
                     
                     # 写入HTML格式
                     f_html.write(f"""
-    <div style="margin-bottom: 30px; padding: 25px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); background-color: #fff; transition: transform 0.2s ease;">
-        <div style="font-size: 1.4em; font-weight: bold; margin-bottom: 10px; color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px;">文章{i}/{len(summaries)}: {s['title']}</div>
+    <div style="margin-bottom: 30px; padding: 15px 0; border-bottom: 1px solid #ddd;">
+        <div style="font-size: 1.4em; font-weight: bold; margin-bottom: 10px; color: #2c3e50;">文章{i}/{len(summaries)}: {s['title']}</div>
         <div style="color: #666; margin-bottom: 15px; font-size: 0.9em;">
             <div style="padding: 3px 0;"><strong>来源：</strong>{s['source']}</div>
             <div style="padding: 3px 0;"><strong>原文链接：</strong><a href="{s['link']}" target="_blank" style="color: #3498db; text-decoration: none; font-weight: 500;">{s['link']}</a></div>
@@ -715,63 +715,11 @@ class PodcastGenerator:
 请直接输出播报内容。
 """
 
-            # 生成自然的广播式副标题
-            # 选择3-5个不重复的关键词
-            selected_keywords = []
-            random.shuffle(all_keywords)
-            for keyword in all_keywords:
-                if keyword not in selected_keywords:
-                    selected_keywords.append(keyword)
-                    if len(selected_keywords) >= 5:
-                        break
-            
-            # 如果关键词不足，使用标题中的词补充
-            if len(selected_keywords) < 3:
-                for title in all_titles:
-                    words = title.split()
-                    for word in words:
-                        if word not in selected_keywords and len(word) > 1:
-                            selected_keywords.append(word)
-                            if len(selected_keywords) >= 5:
-                                break
-                    if len(selected_keywords) >= 5:
-                        break
-            
-            # 生成广播式副标题
-            if len(selected_keywords) >= 3:
-                highlight = f"大家好，这里是出版电台每日播报，今天出版圈的最新动态，从{selected_keywords[0]}，到{selected_keywords[1]}，"
-                
-                if len(selected_keywords) >= 5:
-                    highlight += f"再到{selected_keywords[2]}，以及{selected_keywords[3]}，当然也少不了{selected_keywords[4]}。"
-                elif len(selected_keywords) >= 4:
-                    highlight += f"再到{selected_keywords[2]}，当然也少不了{selected_keywords[3]}。"
-                else:
-                    highlight += f"当然也少不了{selected_keywords[2]}。"
-            else:
-                # 如果无法生成自然的广播副标题，从预设的标题中随机选择一个
-                preset_highlights = [
-                    "牛人猛读书单，你读过几本？",
-                    "重磅新书来袭！解锁职场成功密码",
-                    "数字化浪潮下的出版业新机遇",
-                    "畅销书背后的营销秘密大揭秘！",
-                    "从经典到畅销，好书如何炼成？",
-                    "编辑推荐：本月必读好书清单",
-                    "阅读改变命运，这本书让你脱胎换骨",
-                    "出版界年度盛事，不容错过的重磅新书",
-                    "AI时代的阅读指南，提升认知就靠它",
-                    "解锁创作密码，成为下一个畅销书作家",
-                    "出版人必看！行业趋势与未来方向",
-                    "读者口碑爆棚，这些好书不容错过",
-                    "数字出版新玩法，传统出版社如何转型？",
-                    "畅销书作家的秘密武器，原来是这个！",
-                    "出版业最新动态，这些变化你知道吗？",
-                    "好内容如何变现？出版人的营销指南",
-                    "读书人的福利来了！这些新书值得关注",
-                    "出版圈大事件，行业巨头最新动向",
-                    "新媒体时代的出版策略，专家这样说",
-                    "必读书单出炉，你跟上了吗？"
-                ]
-                highlight = random.choice(preset_highlights)
+            # 修改 highlight 生成部分，使用固定格式
+            # 在 generate_final_summary 方法中，替换现有的 highlight 生成逻辑
+
+            # 使用简单直接的固定格式
+            highlight = f"您好，今天为您准备了{len(summaries)}篇出版行业的新鲜资讯，请您查收。"
 
             headers = {
                 "Authorization": f"Bearer {self.api_key}",
