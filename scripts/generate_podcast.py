@@ -596,12 +596,14 @@ class PodcastGenerator:
             
             # 保存总结到正确位置
             summary_file = os.path.join(podcast_dir, 'summary.txt')
+            summary_html = os.path.join(podcast_dir, 'summary.html')  # 新增HTML文件
             articles_file = os.path.join(podcast_dir, 'articles.txt')
             script_file = os.path.join(podcast_dir, 'script.txt')
             
             # 保存总结和原文
             with open(summary_file, 'w', encoding='utf-8') as f_summary, \
-                 open(articles_file, 'w', encoding='utf-8') as f_articles:
+                 open(articles_file, 'w', encoding='utf-8') as f_articles, \
+                 open(summary_html, 'w', encoding='utf-8') as f_html:  # 新增HTML文件写入
                 
                 # 添加文章数量信息
                 f_summary.write("出版行业新闻总结\n\n")
@@ -609,6 +611,64 @@ class PodcastGenerator:
                 f_summary.write("="*50 + "\n\n")  # 添加分隔线
                 
                 f_articles.write("出版行业新闻原文\n\n")
+                
+                # 开始写入HTML文件头部
+                f_html.write("""<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>出版行业新闻总结</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        .article {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .article-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .article-meta {
+            color: #666;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+        .article-summary {
+            margin-top: 15px;
+            line-height: 1.7;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .separator {
+            margin: 30px 0;
+            border: 0;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <h1>出版行业新闻总结</h1>
+    <p>今天总结了 """ + str(len(summaries)) + """ 篇文章</p>
+    <hr class="separator">
+""")
                 
                 # 收集所有文章标题和关键词
                 all_titles = []
@@ -643,6 +703,28 @@ class PodcastGenerator:
                     f_articles.write(f"发布时间：{formatted_time}\n")
                     f_articles.write(f"原文：\n{s.get('content', '未获取到原文')}\n")
                     f_articles.write("\n" + "="*50 + "\n\n")
+                    
+                    # 写入HTML格式
+                    f_html.write(f"""
+    <div class="article">
+        <div class="article-title">文章{i}/{len(summaries)}: {s['title']}</div>
+        <div class="article-meta">
+            <div>来源：{s['source']}</div>
+            <div>原文链接：<a href="{s['link']}" target="_blank">{s['link']}</a></div>
+            <div>发布时间：{formatted_time}</div>
+        </div>
+        <div class="article-summary">
+            <strong>总结：</strong><br>
+            {s['summary'].replace('\n', '<br>')}
+        </div>
+    </div>
+""")
+                
+                # 写入HTML文件尾部
+                f_html.write("""
+</body>
+</html>
+""")
             
             # 生成播报稿
             article_count = len(summaries)
@@ -775,7 +857,7 @@ class PodcastGenerator:
                 'id': timestamp,
                 'date': datetime.now().strftime('%Y-%m-%d'),
                 'title': f"出版电台播报 {datetime.now().strftime('%Y年%m月%d日')}",
-                'transcript_path': f'./podcasts/{timestamp}/summary.txt',  # 保持 ./ 前缀
+                'transcript_path': f'./podcasts/{timestamp}/summary.html',  # 修改为HTML文件
                 'audio_path': audio_path,  # 保持 ./ 前缀
                 'highlight': highlight  # 添加广播式副标题
             }

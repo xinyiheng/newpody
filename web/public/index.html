@@ -265,36 +265,43 @@
                                 throw new Error(`HTTP error! status: ${scriptResponse.status}`);
                             }
                             
-                            const scriptContent = await scriptResponse.text();
-                            modalTitle.textContent = podcast.title;
-                            
-                            // 预处理文本内容
-                            const articles = scriptContent.split('----------------------------------------');
-                            let formattedContent = '';
-                            
-                            // 使用 DocumentFragment 提高性能
-                            const fragment = document.createDocumentFragment();
-                            articles.forEach(article => {
-                                if (!article.trim()) return;
+                            // 检查是否是HTML文件
+                            if (scriptPath.endsWith('.html')) {
+                                // 使用iframe加载HTML内容
+                                modalTitle.textContent = podcast.title;
+                                modalContent.innerHTML = `<iframe src="${scriptPath}" style="width:100%; height:70vh; border:none;"></iframe>`;
+                            } else {
+                                // 处理文本文件
+                                const scriptContent = await scriptResponse.text();
+                                modalTitle.textContent = podcast.title;
                                 
-                                // 移除多余的空行，只保留实际内容
-                                const cleanedLines = article.trim().split('\n')
-                                    .filter(line => line.trim())
-                                    .map(line => line.trim());  // 确保每行没有多余空格
+                                // 预处理文本内容
+                                const articles = scriptContent.split('----------------------------------------');
                                 
-                                const articleDiv = document.createElement('div');
-                                articleDiv.className = 'article-content';
-                                articleDiv.innerHTML = cleanedLines.map(line => `<div>${line}</div>`).join('');
-                                fragment.appendChild(articleDiv);
+                                // 使用 DocumentFragment 提高性能
+                                const fragment = document.createDocumentFragment();
+                                articles.forEach(article => {
+                                    if (!article.trim()) return;
+                                    
+                                    // 移除多余的空行，只保留实际内容
+                                    const cleanedLines = article.trim().split('\n')
+                                        .filter(line => line.trim())
+                                        .map(line => line.trim());  // 确保每行没有多余空格
+                                    
+                                    const articleDiv = document.createElement('div');
+                                    articleDiv.className = 'article-content';
+                                    articleDiv.innerHTML = cleanedLines.map(line => `<div>${line}</div>`).join('');
+                                    fragment.appendChild(articleDiv);
+                                    
+                                    const hr = document.createElement('hr');
+                                    hr.className = 'my-4';
+                                    fragment.appendChild(hr);
+                                });
                                 
-                                const hr = document.createElement('hr');
-                                hr.className = 'my-4';
-                                fragment.appendChild(hr);
-                            });
-                            
-                            // 清空并添加内容
-                            modalContent.innerHTML = '';
-                            modalContent.appendChild(fragment);
+                                // 清空并添加内容
+                                modalContent.innerHTML = '';
+                                modalContent.appendChild(fragment);
+                            }
                         } catch (error) {
                             console.error('加载文稿失败:', error, '路径:', podcast.transcript_path);
                             modalContent.innerHTML = `
