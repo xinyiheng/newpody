@@ -267,9 +267,25 @@
                             
                             // 检查是否是HTML文件
                             if (scriptPath.endsWith('.html')) {
-                                // 使用iframe加载HTML内容
+                                // 获取HTML内容
+                                const htmlContent = await scriptResponse.text();
                                 modalTitle.textContent = podcast.title;
-                                modalContent.innerHTML = `<iframe src="${scriptPath}" style="width:100%; height:70vh; border:none;"></iframe>`;
+                                
+                                // 提取HTML内容中的body部分
+                                const bodyContent = htmlContent.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+                                if (bodyContent && bodyContent[1]) {
+                                    // 只显示body内容，保留样式
+                                    const styleContent = htmlContent.match(/<style[^>]*>([\s\S]*)<\/style>/i);
+                                    let styles = '';
+                                    if (styleContent && styleContent[1]) {
+                                        styles = `<style>${styleContent[1]}</style>`;
+                                    }
+                                    
+                                    modalContent.innerHTML = styles + bodyContent[1];
+                                } else {
+                                    // 如果无法提取body，显示完整HTML
+                                    modalContent.innerHTML = htmlContent;
+                                }
                             } else {
                                 // 处理文本文件
                                 const scriptContent = await scriptResponse.text();

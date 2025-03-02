@@ -620,7 +620,7 @@ class PodcastGenerator:
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>出版行业新闻总结</title>
     <style>
-        body {
+        .podcast-transcript {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.6;
             color: #333;
@@ -629,12 +629,13 @@ class PodcastGenerator:
             padding: 20px;
             background-color: #f8f5e6; /* 淡米色背景 */
         }
-        h1, h2 {
+        .podcast-transcript h1, 
+        .podcast-transcript h2 {
             color: #2c3e50;
             text-align: center;
             margin-bottom: 20px;
         }
-        .article {
+        .podcast-transcript .article {
             margin-bottom: 30px;
             padding: 25px;
             border-radius: 10px;
@@ -642,10 +643,10 @@ class PodcastGenerator:
             background-color: #fff;
             transition: transform 0.2s ease;
         }
-        .article:hover {
+        .podcast-transcript .article:hover {
             transform: translateY(-5px);
         }
-        .article-title {
+        .podcast-transcript .article-title {
             font-size: 1.4em;
             font-weight: bold;
             margin-bottom: 10px;
@@ -653,7 +654,7 @@ class PodcastGenerator:
             border-bottom: 2px solid #eee;
             padding-bottom: 10px;
         }
-        .article-meta {
+        .podcast-transcript .article-meta {
             color: #666;
             margin-bottom: 15px;
             font-size: 0.9em;
@@ -661,37 +662,37 @@ class PodcastGenerator:
             flex-direction: column;
             gap: 5px;
         }
-        .article-meta div {
+        .podcast-transcript .article-meta div {
             padding: 3px 0;
         }
-        .article-summary {
+        .podcast-transcript .article-summary {
             margin-top: 15px;
             line-height: 1.7;
             text-align: justify;
         }
-        a {
+        .podcast-transcript a {
             color: #3498db;
             text-decoration: none;
             font-weight: 500;
             transition: color 0.2s ease;
         }
-        a:hover {
+        .podcast-transcript a:hover {
             color: #2980b9;
             text-decoration: underline;
         }
-        .separator {
+        .podcast-transcript .separator {
             margin: 30px auto;
             width: 80%;
             border: 0;
             border-top: 1px solid #ddd;
         }
-        .header {
+        .podcast-transcript .header {
             text-align: center;
             margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 2px solid #ddd;
         }
-        .footer {
+        .podcast-transcript .footer {
             text-align: center;
             margin-top: 40px;
             padding-top: 20px;
@@ -701,7 +702,7 @@ class PodcastGenerator:
         }
     </style>
 </head>
-<body>
+<body class="podcast-transcript">
     <div class="header">
         <h1>出版行业新闻总结</h1>
         <p>今天总结了 """ + str(len(summaries)) + """ 篇文章</p>
