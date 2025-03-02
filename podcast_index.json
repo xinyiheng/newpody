@@ -1,6 +1,14 @@
 {
   "podcasts": [
     {
+      "id": "20250302_094410",
+      "date": "2025-03-02",
+      "title": "出版电台播报 2025年03月02日",
+      "transcript_path": "./podcasts/20250302_094410/summary.html",
+      "audio_path": "./podcasts/20250302_094410/podcast.mp3",
+      "highlight": "阅读改变命运，这本书让你脱胎换骨"
+    },
+    {
       "id": "20250302_093423",
       "date": "2025-03-02",
       "title": "出版电台播报 2025年03月02日",
