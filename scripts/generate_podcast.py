@@ -627,47 +627,85 @@ class PodcastGenerator:
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
+            background-color: #f8f5e6; /* 淡米色背景 */
         }
         h1, h2 {
             color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
         }
         .article {
             margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: #fff;
+            transition: transform 0.2s ease;
+        }
+        .article:hover {
+            transform: translateY(-5px);
         }
         .article-title {
             font-size: 1.4em;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
         }
         .article-meta {
             color: #666;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             font-size: 0.9em;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .article-meta div {
+            padding: 3px 0;
         }
         .article-summary {
             margin-top: 15px;
             line-height: 1.7;
+            text-align: justify;
         }
         a {
             color: #3498db;
             text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
         }
         a:hover {
+            color: #2980b9;
             text-decoration: underline;
         }
         .separator {
-            margin: 30px 0;
+            margin: 30px auto;
+            width: 80%;
             border: 0;
-            border-top: 1px solid #eee;
+            border-top: 1px solid #ddd;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #ddd;
+            color: #666;
+            font-size: 0.9em;
         }
     </style>
 </head>
 <body>
-    <h1>出版行业新闻总结</h1>
-    <p>今天总结了 """ + str(len(summaries)) + """ 篇文章</p>
-    <hr class="separator">
+    <div class="header">
+        <h1>出版行业新闻总结</h1>
+        <p>今天总结了 """ + str(len(summaries)) + """ 篇文章</p>
+    </div>
 """)
                 
                 # 收集所有文章标题和关键词
@@ -709,19 +747,22 @@ class PodcastGenerator:
     <div class="article">
         <div class="article-title">文章{i}/{len(summaries)}: {s['title']}</div>
         <div class="article-meta">
-            <div>来源：{s['source']}</div>
-            <div>原文链接：<a href="{s['link']}" target="_blank">{s['link']}</a></div>
-            <div>发布时间：{formatted_time}</div>
+            <div><strong>来源：</strong>{s['source']}</div>
+            <div><strong>原文链接：</strong><a href="{s['link']}" target="_blank">{s['link']}</a></div>
+            <div><strong>发布时间：</strong>{formatted_time}</div>
         </div>
         <div class="article-summary">
             <strong>总结：</strong><br>
-            {s['summary'].replace('\n', '<br>')}
+            {s['summary'].replace('\n', '<br>').replace('*', '').replace('#', '')}
         </div>
     </div>
 """)
                 
                 # 写入HTML文件尾部
                 f_html.write("""
+    <div class="footer">
+        <p>© 出版电台 - 每日为您提供出版行业最新资讯</p>
+    </div>
 </body>
 </html>
 """)
