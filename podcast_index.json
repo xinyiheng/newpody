@@ -1,6 +1,14 @@
 {
   "podcasts": [
     {
+      "id": "20250302_090738",
+      "date": "2025-03-02",
+      "title": "出版电台播报 2025年03月02日",
+      "transcript_path": "./podcasts/20250302_090738/summary.txt",
+      "audio_path": "./podcasts/20250302_090738/podcast.mp3",
+      "highlight": "出版人必看！行业趋势与未来方向"
+    },
+    {
       "id": "20250301_221950",
       "date": "2025-03-01",
       "title": "出版电台播报 2025年03月01日",
