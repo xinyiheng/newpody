@@ -142,7 +142,7 @@ class PodcastGenerator:
                 'id': podcast_data['id'],
                 'date': podcast_data['date'],
                 'title': podcast_data['title'],
-                'transcript_path': f'./podcasts/{podcast_data["id"]}/summary.txt',  # 保持 ./ 前缀
+                'transcript_path': podcast_data['transcript_path'],  # 使用传入的路径，不再硬编码
                 'audio_path': podcast_data.get('audio_path'),  # 使用传入的路径
                 'highlight': podcast_data.get('highlight', "探索出版行业的最新动态，聆听行业专家的深度解析")  # 添加副标题，如果没有则使用默认值
             }
