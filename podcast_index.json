@@ -1,6 +1,14 @@
 {
   "podcasts": [
     {
+      "id": "20250302_101200",
+      "date": "2025-03-02",
+      "title": "出版电台播报 2025年03月02日",
+      "transcript_path": "./podcasts/20250302_101200/summary.html",
+      "audio_path": "./podcasts/20250302_101200/podcast.mp3",
+      "highlight": "出版圈大事件，行业巨头最新动向"
+    },
+    {
       "id": "20250302_095726",
       "date": "2025-03-02",
       "title": "出版电台播报 2025年03月02日",
