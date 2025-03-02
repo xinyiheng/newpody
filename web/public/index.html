@@ -273,19 +273,74 @@
                                 
                                 // 提取HTML内容中的body部分
                                 const bodyContent = htmlContent.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+                                let content = '';
+                                
                                 if (bodyContent && bodyContent[1]) {
-                                    // 只显示body内容，保留样式
-                                    const styleContent = htmlContent.match(/<style[^>]*>([\s\S]*)<\/style>/i);
-                                    let styles = '';
-                                    if (styleContent && styleContent[1]) {
-                                        styles = `<style>${styleContent[1]}</style>`;
-                                    }
-                                    
-                                    modalContent.innerHTML = styles + bodyContent[1];
+                                    content = bodyContent[1];
                                 } else {
-                                    // 如果无法提取body，显示完整HTML
-                                    modalContent.innerHTML = htmlContent;
+                                    // 如果无法提取body，使用整个HTML
+                                    content = htmlContent;
                                 }
+                                
+                                // 应用自定义样式和内容
+                                modalContent.innerHTML = `
+                                    <div style="background-color: #f8f5e6; padding: 20px; max-height: 70vh; overflow-y: auto;">
+                                        <style>
+                                            .article {
+                                                margin-bottom: 30px;
+                                                padding: 25px;
+                                                border-radius: 10px;
+                                                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                                                background-color: #fff;
+                                                transition: transform 0.2s ease;
+                                            }
+                                            .article:hover {
+                                                transform: translateY(-5px);
+                                            }
+                                            .article-title {
+                                                font-size: 1.4em;
+                                                font-weight: bold;
+                                                margin-bottom: 10px;
+                                                color: #2c3e50;
+                                                border-bottom: 2px solid #eee;
+                                                padding-bottom: 10px;
+                                            }
+                                            .article-meta {
+                                                color: #666;
+                                                margin-bottom: 15px;
+                                                font-size: 0.9em;
+                                            }
+                                            .article-summary {
+                                                margin-top: 15px;
+                                                line-height: 1.7;
+                                            }
+                                            .modal-content a {
+                                                color: #3498db !important;
+                                                text-decoration: none;
+                                                font-weight: 500;
+                                            }
+                                            .modal-content a:hover {
+                                                color: #2980b9 !important;
+                                                text-decoration: underline;
+                                            }
+                                            .header {
+                                                text-align: center;
+                                                margin-bottom: 30px;
+                                                padding-bottom: 20px;
+                                                border-bottom: 2px solid #ddd;
+                                            }
+                                            .footer {
+                                                text-align: center;
+                                                margin-top: 40px;
+                                                padding-top: 20px;
+                                                border-top: 2px solid #ddd;
+                                                color: #666;
+                                                font-size: 0.9em;
+                                            }
+                                        </style>
+                                        ${content}
+                                    </div>
+                                `;
                             } else {
                                 // 处理文本文件
                                 const scriptContent = await scriptResponse.text();
