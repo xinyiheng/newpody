@@ -207,14 +207,11 @@ jobs:
             # 最后尝试一种更直接的方法：使用curl直接与API交互
             echo "Attempting direct API connection with curl as last resort..."
             SERVICE_ID="podcast-static-site"
+            # 使用单行JSON代替heredoc，避免YAML语法问题
             curl -v -X POST https://gateway.zeabur.com/graphql \
               -H "Authorization: Bearer $ZEABUR_TOKEN" \
               -H "Content-Type: application/json" \
-              --data-binary @- <<EOF || true
-            {
-              "query": "mutation { setCurrentProject(projectID: \"${{ secrets.ZEABUR_PROJECT_ID }}\") }"
-            }
-EOF
+              -d "{\"query\":\"mutation { setCurrentProject(projectID: \\\"${{ secrets.ZEABUR_PROJECT_ID }}\\\") }\"}" || true
             
             echo "Warning: Failed to set context, will try deployment anyway"
           fi
