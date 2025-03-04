@@ -991,6 +991,27 @@
         "link": "https://mp.weixin.qq.com/s/oDmY2C1Sh3ypECsYkvn_tw",
         "pub_time": "Mon, 03 Mar 2025 06:18:35 +0000"
       }
+    },
+    "https://mp.weixin.qq.com/s/3_1crbfGgdNZPzqHR_puRA": {
+      "timestamp": "2025-03-04 08:49:07",
+      "data": {
+        "title": "3月书讯｜今年最期待的书，都在这个月了！",
+        "author": "未知作者",
+        "source": "湛庐文化",
+        "link": "https://mp.weixin.qq.com/s/3_1crbfGgdNZPzqHR_puRA",
+        "pub_time": "Mon, 03 Mar 2025 21:36:34 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/yhXyo-DzxExC1uXZqJhC4w": {
+      "timestamp": "2025-03-04 08:49:12",
+      "data": {
+        "title": "当世上仅剩“我”！| 蜗牛壳里的世界",
+        "author": "未知作者",
+        "source": "中科书院",
+        "link": "https://mp.weixin.qq.com/s/yhXyo-DzxExC1uXZqJhC4w",
+        "pub_time": "Mon, 03 Mar 2025 14:47:14 +0000"
+      },
+      "filter_reason": "fetch_failed"
     }
   }
 }
