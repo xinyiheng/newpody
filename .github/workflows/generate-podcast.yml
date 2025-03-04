@@ -138,10 +138,16 @@ jobs:
     - name: Deploy to Zeabur
       if: steps.generate.outcome == 'success'
       id: zeabur_deploy
+      env:
+        ZEABUR_TOKEN: ${{ secrets.ZEABUR_TOKEN }}
       run: |
         # 安装 Zeabur CLI
         echo "Installing Zeabur CLI..."
-        npm install -g @zeabur/cli || { echo "Failed to install Zeabur CLI"; exit 1; }
+        npm install -g @zeabur/cli
+        
+        # 检查版本（根据帮助信息修正命令）
+        echo "Checking Zeabur CLI version:"
+        zeabur version
         
         # 验证 gh-pages 目录
         if [ ! -d "gh-pages" ]; then
@@ -149,37 +155,36 @@ jobs:
           exit 1
         fi
         
-        # 检查必要的文件
-        echo "Verifying required files in gh-pages directory..."
-        if [ ! -f "gh-pages/index.html" ]; then
-          echo "Warning: index.html not found in gh-pages directory!"
-        fi
-        
-        if [ ! -d "gh-pages/podcasts" ]; then
-          echo "Warning: podcasts directory not found in gh-pages!"
-        fi
-        
-        # 配置认证
-        echo "Authenticating with Zeabur..."
-        if ! echo "${{ secrets.ZEABUR_TOKEN }}" | zeabur login --token-stdin; then
-          echo "Failed to authenticate with Zeabur"
-          exit 1
-        fi
-        
         # 显示将要部署的文件
         echo "Files to be deployed to Zeabur:"
         ls -la gh-pages
-        echo "Content of podcasts directory:"
-        ls -la gh-pages/podcasts || echo "No podcasts directory found"
         
-        # 部署到 Zeabur
         echo "Deploying to Zeabur..."
         cd gh-pages
         
-        # 设置超时为 5 分钟
-        timeout 300 zeabur deploy --project ${{ secrets.ZEABUR_PROJECT_ID }} --service static-site || {
-          echo "Zeabur deployment failed or timed out after 5 minutes"
-          exit 1
+        # 设置超时时间增加到 5 分钟，防止连接超时问题
+        echo "Setting HTTP_TIMEOUT=300"
+        export HTTP_TIMEOUT=300
+        
+        # 查看项目列表
+        echo "Listing projects (to verify connectivity and authentication):"
+        zeabur project list -i=false || {
+          echo "Failed to list projects. Authentication or connectivity issue."
+          echo "Continuing with deployment anyway..."
+        }
+        
+        # 根据帮助信息，使用正确的 deploy 命令和参数
+        SERVICE_NAME="podcast-static-site"
+        
+        echo "Deploying with direct deploy command..."
+        zeabur deploy --name "$SERVICE_NAME" --create -i=false || {
+          echo "First method failed, trying service deploy..."
+          
+          # 尝试服务部署命令
+          zeabur service deploy -i=false || {
+            echo "All deployment methods failed"
+            exit 1
+          }
         }
         
         echo "✅ Deployment to Zeabur completed successfully"
@@ -193,8 +198,9 @@ jobs:
           echo "Your site should be available at your Zeabur domain shortly"
         else
           echo "❌ Zeabur deployment failed. Please check the logs above for details."
-          echo "Common issues:"
-          echo "1. Authentication problems - check your ZEABUR_TOKEN"
-          echo "2. Project ID issues - verify your ZEABUR_PROJECT_ID"
-          echo "3. Network timeouts - the deployment might still be processing"
+          
+          echo "Recommendations:"
+          echo "1. 检查网络连接，终端输出显示连接超时问题"
+          echo "2. 使用 zeabur project list 命令验证令牌是否有效"
+          echo "3. 考虑在 Zeabur 控制台上手动创建静态网站服务"
         fi
