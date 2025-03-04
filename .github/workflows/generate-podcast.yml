@@ -127,3 +127,74 @@ jobs:
         ls -la podcasts || echo "podcasts directory not found"
         echo "Checking latest podcast..."
         ls -la podcasts/$(ls -t podcasts | head -n1) || echo "No podcasts found"
+        
+    # 添加部署到 Zeabur 的步骤
+    - name: Setup Node.js for Zeabur CLI
+      if: steps.generate.outcome == 'success'
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        
+    - name: Deploy to Zeabur
+      if: steps.generate.outcome == 'success'
+      id: zeabur_deploy
+      run: |
+        # 安装 Zeabur CLI
+        echo "Installing Zeabur CLI..."
+        npm install -g @zeabur/cli || { echo "Failed to install Zeabur CLI"; exit 1; }
+        
+        # 验证 gh-pages 目录
+        if [ ! -d "gh-pages" ]; then
+          echo "Error: gh-pages directory not found!"
+          exit 1
+        fi
+        
+        # 检查必要的文件
+        echo "Verifying required files in gh-pages directory..."
+        if [ ! -f "gh-pages/index.html" ]; then
+          echo "Warning: index.html not found in gh-pages directory!"
+        fi
+        
+        if [ ! -d "gh-pages/podcasts" ]; then
+          echo "Warning: podcasts directory not found in gh-pages!"
+        fi
+        
+        # 配置认证
+        echo "Authenticating with Zeabur..."
+        if ! echo "${{ secrets.ZEABUR_TOKEN }}" | zeabur login --token-stdin; then
+          echo "Failed to authenticate with Zeabur"
+          exit 1
+        fi
+        
+        # 显示将要部署的文件
+        echo "Files to be deployed to Zeabur:"
+        ls -la gh-pages
+        echo "Content of podcasts directory:"
+        ls -la gh-pages/podcasts || echo "No podcasts directory found"
+        
+        # 部署到 Zeabur
+        echo "Deploying to Zeabur..."
+        cd gh-pages
+        
+        # 设置超时为 5 分钟
+        timeout 300 zeabur deploy --project ${{ secrets.ZEABUR_PROJECT_ID }} --service static-site || {
+          echo "Zeabur deployment failed or timed out after 5 minutes"
+          exit 1
+        }
+        
+        echo "✅ Deployment to Zeabur completed successfully"
+      continue-on-error: true
+    
+    - name: Report Zeabur Deployment Status
+      if: always() && steps.zeabur_deploy.outcome != 'skipped'
+      run: |
+        if [ "${{ steps.zeabur_deploy.outcome }}" == "success" ]; then
+          echo "🎉 Zeabur deployment was successful!"
+          echo "Your site should be available at your Zeabur domain shortly"
+        else
+          echo "❌ Zeabur deployment failed. Please check the logs above for details."
+          echo "Common issues:"
+          echo "1. Authentication problems - check your ZEABUR_TOKEN"
+          echo "2. Project ID issues - verify your ZEABUR_PROJECT_ID"
+          echo "3. Network timeouts - the deployment might still be processing"
+        fi
