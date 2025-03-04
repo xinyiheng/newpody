@@ -140,6 +140,7 @@ jobs:
       id: zeabur_deploy
       env:
         ZEABUR_TOKEN: ${{ secrets.ZEABUR_TOKEN }}
+        ZEABUR_SERVICE_ID: ${{ secrets.ZEABUR_SERVICE_ID }}
       run: |
         # 安装 Zeabur CLI
         echo "Installing Zeabur CLI..."
@@ -169,7 +170,6 @@ jobs:
         export HTTP_MAX_RETRY_WAIT=300 # 最大等待5分钟
         
         # 尝试加速连接 (可选设置)
-        export NODE_TLS_REJECT_UNAUTHORIZED=0  # 警告：仅用于测试，可能存在安全风险
         export NODE_OPTIONS=--dns-result-order=ipv4first  # 优先使用IPv4
         
         # 诊断网络连接
@@ -203,25 +203,12 @@ jobs:
           
           if [ $RETRY_COUNT -eq $MAX_RETRY ]; then
             echo "All attempts to set project context failed."
-            
-            # 最后尝试一种更直接的方法：使用curl直接与API交互
-            echo "Attempting direct API connection with curl as last resort..."
-            SERVICE_ID="podcast-static-site"
-            # 使用单行JSON代替heredoc，避免YAML语法问题
-            curl -v -X POST https://gateway.zeabur.com/graphql \
-              -H "Authorization: Bearer $ZEABUR_TOKEN" \
-              -H "Content-Type: application/json" \
-              -d "{\"query\":\"mutation { setCurrentProject(projectID: \\\"${{ secrets.ZEABUR_PROJECT_ID }}\\\") }\"}" || true
-            
             echo "Warning: Failed to set context, will try deployment anyway"
           fi
         done
         
-        # 设置服务名称
-        SERVICE_NAME="podcast-static-site"
-        
-        # 使用指数退避策略进行部署
-        echo "Deploying with exponential backoff strategy..."
+        # 使用指数退避策略进行部署 - 更新到现有服务而不是创建新服务
+        echo "Deploying to existing service with exponential backoff strategy..."
         DEPLOY_RETRY=8
         DEPLOY_COUNT=0
         DEPLOY_WAIT=15
@@ -230,9 +217,31 @@ jobs:
           DEPLOY_COUNT=$((DEPLOY_COUNT+1))
           echo "Deployment attempt $DEPLOY_COUNT of $DEPLOY_RETRY (timeout: ${DEPLOY_WAIT}s)"
           
-          # 尝试直接部署
-          if timeout ${DEPLOY_WAIT}s zeabur deploy --name "$SERVICE_NAME" --create -i=false; then
-            echo "Deployment succeeded!"
+          # 尝试多种部署方式 - 使用服务ID直接部署
+          echo "Attempting to deploy using service ID..."
+          if timeout ${DEPLOY_WAIT}s zeabur deploy --service-id "${ZEABUR_SERVICE_ID}" -i=false; then
+            echo "Deployment succeeded using service ID!"
+            break
+          fi
+          
+          # 如果使用服务ID失败，尝试使用正确的服务名称 "public" 进行更新
+          echo "Attempting to deploy using service name 'public'..."
+          if timeout ${DEPLOY_WAIT}s zeabur deploy --name "public" --update -i=false; then
+            echo "Deployment succeeded using service name 'public'!"
+            break
+          fi
+          
+          # 如果使用服务ID失败，尝试使用之前的服务名称(兼容性)
+          echo "Attempting to deploy using service name 'podcast-static-site'..."
+          if timeout ${DEPLOY_WAIT}s zeabur deploy --name "podcast-static-site" --update -i=false; then
+            echo "Deployment succeeded using service name 'podcast-static-site'!"
+            break
+          fi
+          
+          # 如果以上方法都失败，尝试在没有标志的情况下部署
+          echo "Attempting to deploy with no specific flags..."
+          if timeout ${DEPLOY_WAIT}s zeabur deploy -i=false; then
+            echo "Deployment succeeded with no specific flags!"
             break
           else
             # 指数退避：等待时间翻倍，但不超过5分钟
@@ -248,6 +257,14 @@ jobs:
           
           if [ $DEPLOY_COUNT -eq $DEPLOY_RETRY ]; then
             echo "All deployment attempts failed."
+            
+            # 最后尝试发送简单的 HTTP POST 请求进行部署
+            echo "Attempting direct API deployment as last resort..."
+            curl -v -X POST "https://gateway.zeabur.com/api/v1/services/${ZEABUR_SERVICE_ID}/redeploy" \
+              -H "Authorization: Bearer ${ZEABUR_TOKEN}" \
+              -H "Content-Type: application/json" || true
+            
+            # 如果所有尝试都失败，则退出错误
             exit 1
           fi
         done
@@ -265,10 +282,9 @@ jobs:
           echo "❌ Zeabur deployment failed. Please check the logs above for details."
           
           echo "Recommendations:"
-          echo "1. 这可能是区域性网络问题，尝试以下解决方案："
-          echo "   - 联系 Zeabur 支持，询问他们的服务是否支持从 GitHub Actions 环境访问"
-          echo "   - 考虑使用自托管的 GitHub Actions 运行器，放置在与 Zeabur 相同区域"
-          echo "   - 尝试使用第三方 CD 服务例如 Netlify 或 Vercel，它们与 GitHub 集成更紧密"
-          echo "2. 如果这是临时性问题，可能几小时后再次尝试会成功"
-          echo "3. 考虑在 Zeabur 控制台上手动部署网站作为临时解决方案"
+          echo "1. 检查您的 ZEABUR_SERVICE_ID 密钥是否已正确设置"
+          echo "2. 访问 Zeabur 控制台，检查服务状态并尝试手动更新"
+          echo "3. 如果网络问题持续存在，考虑以下替代方案："
+          echo "   - 使用自托管的 GitHub Actions 运行器，放置在与 Zeabur 相同区域"
+          echo "   - 使用第三方 CD 服务，如 Netlify 或 Vercel"
         fi
