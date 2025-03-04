@@ -145,7 +145,7 @@ jobs:
         echo "Installing Zeabur CLI..."
         npm install -g @zeabur/cli
         
-        # 检查版本（根据帮助信息修正命令）
+        # 检查版本
         echo "Checking Zeabur CLI version:"
         zeabur version
         
@@ -162,30 +162,98 @@ jobs:
         echo "Deploying to Zeabur..."
         cd gh-pages
         
-        # 设置超时时间增加到 5 分钟，防止连接超时问题
-        echo "Setting HTTP_TIMEOUT=300"
-        export HTTP_TIMEOUT=300
+        # 设置更高的超时值
+        export HTTP_TIMEOUT=900       # 15分钟超时
+        export HTTP_RETRY=10          # 最多重试10次
+        export HTTP_RETRY_WAIT=30     # 初始等待30秒
+        export HTTP_MAX_RETRY_WAIT=300 # 最大等待5分钟
         
-        # 查看项目列表
-        echo "Listing projects (to verify connectivity and authentication):"
-        zeabur project list -i=false || {
-          echo "Failed to list projects. Authentication or connectivity issue."
-          echo "Continuing with deployment anyway..."
-        }
+        # 尝试加速连接 (可选设置)
+        export NODE_TLS_REJECT_UNAUTHORIZED=0  # 警告：仅用于测试，可能存在安全风险
+        export NODE_OPTIONS=--dns-result-order=ipv4first  # 优先使用IPv4
         
-        # 根据帮助信息，使用正确的 deploy 命令和参数
+        # 诊断网络连接
+        echo "Diagnosing network connection to Zeabur..."
+        curl -v --connect-timeout 30 https://gateway.zeabur.com || true
+        
+        # 显示当前IP (帮助诊断潜在的IP限制)
+        echo "Current IP address:"
+        curl -s https://api.ipify.org || true
+        
+        # 使用指数退避策略设置项目上下文
+        echo "Setting project context with exponential backoff..."
+        MAX_RETRY=10
+        RETRY_COUNT=0
+        WAIT_TIME=10
+        
+        while [ $RETRY_COUNT -lt $MAX_RETRY ]; do
+          RETRY_COUNT=$((RETRY_COUNT+1))
+          echo "Setting project context, attempt $RETRY_COUNT of $MAX_RETRY (waiting ${WAIT_TIME}s before timeout)"
+          
+          if timeout ${WAIT_TIME}s zeabur context set project --id "${{ secrets.ZEABUR_PROJECT_ID }}" -i=false; then
+            echo "Project context set successfully!"
+            break
+          else
+            # 指数退避：每次失败后等待时间翻倍，但不超过5分钟
+            echo "Failed to set project context, retrying with exponential backoff..."
+            sleep $WAIT_TIME
+            WAIT_TIME=$((WAIT_TIME * 2))
+            [ $WAIT_TIME -gt 300 ] && WAIT_TIME=300
+          fi
+          
+          if [ $RETRY_COUNT -eq $MAX_RETRY ]; then
+            echo "All attempts to set project context failed."
+            
+            # 最后尝试一种更直接的方法：使用curl直接与API交互
+            echo "Attempting direct API connection with curl as last resort..."
+            SERVICE_ID="podcast-static-site"
+            curl -v -X POST https://gateway.zeabur.com/graphql \
+              -H "Authorization: Bearer $ZEABUR_TOKEN" \
+              -H "Content-Type: application/json" \
+              --data-binary @- <<EOF || true
+            {
+              "query": "mutation { setCurrentProject(projectID: \"${{ secrets.ZEABUR_PROJECT_ID }}\") }"
+            }
+EOF
+            
+            echo "Warning: Failed to set context, will try deployment anyway"
+          fi
+        done
+        
+        # 设置服务名称
         SERVICE_NAME="podcast-static-site"
         
-        echo "Deploying with direct deploy command..."
-        zeabur deploy --name "$SERVICE_NAME" --create -i=false || {
-          echo "First method failed, trying service deploy..."
+        # 使用指数退避策略进行部署
+        echo "Deploying with exponential backoff strategy..."
+        DEPLOY_RETRY=8
+        DEPLOY_COUNT=0
+        DEPLOY_WAIT=15
+        
+        while [ $DEPLOY_COUNT -lt $DEPLOY_RETRY ]; do
+          DEPLOY_COUNT=$((DEPLOY_COUNT+1))
+          echo "Deployment attempt $DEPLOY_COUNT of $DEPLOY_RETRY (timeout: ${DEPLOY_WAIT}s)"
           
-          # 尝试服务部署命令
-          zeabur service deploy -i=false || {
-            echo "All deployment methods failed"
+          # 尝试直接部署
+          if timeout ${DEPLOY_WAIT}s zeabur deploy --name "$SERVICE_NAME" --create -i=false; then
+            echo "Deployment succeeded!"
+            break
+          else
+            # 指数退避：等待时间翻倍，但不超过5分钟
+            echo "Deployment failed, retrying with exponential backoff..."
+            sleep $DEPLOY_WAIT
+            DEPLOY_WAIT=$((DEPLOY_WAIT * 2))
+            [ $DEPLOY_WAIT -gt 300 ] && DEPLOY_WAIT=300
+            
+            # 确保项目上下文仍然有效
+            echo "Re-checking project context..."
+            zeabur context set project --id "${{ secrets.ZEABUR_PROJECT_ID }}" -i=false || true
+          fi
+          
+          if [ $DEPLOY_COUNT -eq $DEPLOY_RETRY ]; then
+            echo "All deployment attempts failed."
             exit 1
-          }
-        }
+          fi
+        done
         
         echo "✅ Deployment to Zeabur completed successfully"
       continue-on-error: true
@@ -200,7 +268,10 @@ jobs:
           echo "❌ Zeabur deployment failed. Please check the logs above for details."
           
           echo "Recommendations:"
-          echo "1. 检查网络连接，终端输出显示连接超时问题"
-          echo "2. 使用 zeabur project list 命令验证令牌是否有效"
-          echo "3. 考虑在 Zeabur 控制台上手动创建静态网站服务"
+          echo "1. 这可能是区域性网络问题，尝试以下解决方案："
+          echo "   - 联系 Zeabur 支持，询问他们的服务是否支持从 GitHub Actions 环境访问"
+          echo "   - 考虑使用自托管的 GitHub Actions 运行器，放置在与 Zeabur 相同区域"
+          echo "   - 尝试使用第三方 CD 服务例如 Netlify 或 Vercel，它们与 GitHub 集成更紧密"
+          echo "2. 如果这是临时性问题，可能几小时后再次尝试会成功"
+          echo "3. 考虑在 Zeabur 控制台上手动部署网站作为临时解决方案"
         fi
