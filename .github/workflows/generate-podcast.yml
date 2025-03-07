@@ -2,7 +2,7 @@ name: Generate Podcast
 
 on:
   schedule:
-    - cron: '0 21-22 * * *'  # 在 UTC 22:00 和 23:00 运行
+    - cron: '0 16 * * *'  # 在 UTC 16:00运行
   workflow_dispatch:      # 允许手动触发
   push:
     branches:
