@@ -763,8 +763,8 @@ class PodcastGenerator:
             # 更新索引
             podcast_data = {
                 'id': timestamp,
-                'date': next_day.strftime('%Y-%m-%d'), # 使用下一天的日期
-                'title': f"出版电台播报 {next_day.strftime('%Y年%m月%d日')}", # 标题也使用下一天的日期
+                'date': datetime.now().strftime('%Y-%m-%d'),
+                'title': f"出版电台播报 {datetime.now().strftime('%Y年%m月%d日')}",
                 'transcript_path': f'./podcasts/{timestamp}/summary.html',  # 修改为HTML文件
                 'audio_path': audio_path,  # 保持 ./ 前缀
                 'highlight': highlight  # 添加广播式副标题
