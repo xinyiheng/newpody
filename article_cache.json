@@ -1,46 +1,5 @@
 {
   "articles": {
-    "https://mp.weixin.qq.com/s/P3GHUCJnBdJrnYi-oH4z3A": {
-      "timestamp": "2025-05-15 16:26:55",
-      "data": {
-        "title": "北大社新书抢先看｜5—6月这些书值得期待",
-        "author": "未知作者",
-        "source": "北京大学出版社",
-        "link": "https://mp.weixin.qq.com/s/P3GHUCJnBdJrnYi-oH4z3A",
-        "pub_time": "Wed, 14 May 2025 16:32:42 +0000"
-      }
-    },
-    "https://mp.weixin.qq.com/s/u99qR1mPWZx2nKRl6pyeJA": {
-      "timestamp": "2025-05-15 16:27:00",
-      "data": {
-        "title": "四月光明书榜推荐，在这里看见古书如何焕发新生",
-        "author": "未知作者",
-        "source": "北京大学出版社",
-        "link": "https://mp.weixin.qq.com/s/u99qR1mPWZx2nKRl6pyeJA",
-        "pub_time": "Wed, 14 May 2025 16:32:42 +0000"
-      }
-    },
-    "https://mp.weixin.qq.com/s/MiX03xurm3rCZciaUQa3lg": {
-      "timestamp": "2025-05-15 16:27:04",
-      "data": {
-        "title": "入选4月人文社科联合书单，一本探索人类文明与艺术源头的图文书！",
-        "author": "未知作者",
-        "source": "北京大学出版社",
-        "link": "https://mp.weixin.qq.com/s/MiX03xurm3rCZciaUQa3lg",
-        "pub_time": "Wed, 14 May 2025 16:32:42 +0000"
-      }
-    },
-    "https://mp.weixin.qq.com/s/Tle0WqCDYsfn2chHOwdS2g": {
-      "timestamp": "2025-05-15 16:27:10",
-      "data": {
-        "title": "在6个高质量书单里，寻找你人生的光！",
-        "author": "未知作者",
-        "source": "北京大学出版社",
-        "link": "https://mp.weixin.qq.com/s/Tle0WqCDYsfn2chHOwdS2g",
-        "pub_time": "Wed, 14 May 2025 16:32:42 +0000"
-      },
-      "filter_reason": "fetch_failed"
-    },
     "https://mp.weixin.qq.com/s/DfEfbBfsUCWqlVYl_5-WXw": {
       "timestamp": "2025-05-16 16:24:42",
       "data": {
