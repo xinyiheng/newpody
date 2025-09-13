@@ -25,7 +25,7 @@ class ServeTTSRequest(BaseModel):
 
 class PodcastGenerator:
     def __init__(self):
-        self.rss_url = "https://www.inoreader.com/stream/user/1005507650/tag/%E5%9B%BD%E5%86%85%E5%87%BA%E7%89%88%E5%95%86%E5%85%AC%E4%BC%97%E5%8F%B7"
+        self.rss_url = "https://www.inoreader.com/stream/user/1003916593/tag/%E5%9B%BD%E5%86%85%E5%87%BA%E7%89%88"
         # 从环境变量获取 API key
         self.api_key = os.environ.get('API_KEY')
         if not self.api_key:
