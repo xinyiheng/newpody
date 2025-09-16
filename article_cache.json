@@ -1897,6 +1897,97 @@
         "pub_time": "Sun, 14 Sep 2025 16:25:52 +0000"
       },
       "filter_reason": "fetch_failed"
+    },
+    "https://mp.weixin.qq.com/s/8coE3qLe-pCtMSIFq-kIDg": {
+      "timestamp": "2025-09-16 16:26:00",
+      "data": {
+        "title": "从明天起，关心吃饭和睡觉：《我是寨子里长大的女孩》分享会精彩回顾",
+        "author": "未知作者",
+        "source": "上海译文",
+        "link": "https://mp.weixin.qq.com/s/8coE3qLe-pCtMSIFq-kIDg",
+        "pub_time": "Mon, 15 Sep 2025 16:51:06 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/NYzVsu0WiUX8Bl4mvPSVeg": {
+      "timestamp": "2025-09-16 16:26:04",
+      "data": {
+        "title": "直播预告 | 你和妈妈的关系如何？需要改善吗？",
+        "author": "未知作者",
+        "source": "上海译文",
+        "link": "https://mp.weixin.qq.com/s/NYzVsu0WiUX8Bl4mvPSVeg",
+        "pub_time": "Mon, 15 Sep 2025 16:51:06 +0000"
+      },
+      "filter_reason": "fetch_failed"
+    },
+    "https://mp.weixin.qq.com/s/kQWaX2Z9k1X7MffZpXLWnw": {
+      "timestamp": "2025-09-16 16:26:07",
+      "data": {
+        "title": "她就像《边城》里的翠翠，用一生等待一个不归人",
+        "author": "未知作者",
+        "source": "凤凰出版传媒集团",
+        "link": "https://mp.weixin.qq.com/s/kQWaX2Z9k1X7MffZpXLWnw",
+        "pub_time": "Mon, 15 Sep 2025 16:44:45 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/A80crbe4wcMqB0Yr7ROuwA": {
+      "timestamp": "2025-09-16 16:26:12",
+      "data": {
+        "title": "《悟空请回答》| 本领高强、爱笑爱闹的悟空会不会哭？",
+        "author": "未知作者",
+        "source": "凤凰出版传媒集团",
+        "link": "https://mp.weixin.qq.com/s/A80crbe4wcMqB0Yr7ROuwA",
+        "pub_time": "Mon, 15 Sep 2025 16:44:45 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/yDuIcLPGegm77-_PvGdsEQ": {
+      "timestamp": "2025-09-16 16:26:17",
+      "data": {
+        "title": "今天必读！7本绝佳商业好书",
+        "author": "未知作者",
+        "source": "湛庐文化",
+        "link": "https://mp.weixin.qq.com/s/yDuIcLPGegm77-_PvGdsEQ",
+        "pub_time": "Mon, 15 Sep 2025 16:38:16 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/iV-SLpwELcOW-NdmJP-XRQ": {
+      "timestamp": "2025-09-16 16:26:23",
+      "data": {
+        "title": "DDL高手的状态：拖延，但是品质与时效能够兼得",
+        "author": "未知作者",
+        "source": "湛庐文化",
+        "link": "https://mp.weixin.qq.com/s/iV-SLpwELcOW-NdmJP-XRQ",
+        "pub_time": "Mon, 15 Sep 2025 16:38:16 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/G9JMRhXe8oBvUT39otWflA": {
+      "timestamp": "2025-09-16 16:26:28",
+      "data": {
+        "title": "马上预约｜如何用挪威耐力备战北马？",
+        "author": "未知作者",
+        "source": "湛庐文化",
+        "link": "https://mp.weixin.qq.com/s/G9JMRhXe8oBvUT39otWflA",
+        "pub_time": "Mon, 15 Sep 2025 16:38:16 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/Vbz6Bhb_SA4Jx0wG3Swp9Q": {
+      "timestamp": "2025-09-16 16:26:34",
+      "data": {
+        "title": "辛芷蕾超绝影后心态：我对人生充满欲望",
+        "author": "未知作者",
+        "source": "博集天卷书友会",
+        "link": "https://mp.weixin.qq.com/s/Vbz6Bhb_SA4Jx0wG3Swp9Q",
+        "pub_time": "Mon, 15 Sep 2025 16:33:59 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/oilcS2PUR6pbx6SzotjJGw": {
+      "timestamp": "2025-09-16 16:26:41",
+      "data": {
+        "title": "活动预告 | 《允许万物穿过我》分享会北京站！和百万畅销书作家聊聊环球旅行那些事儿",
+        "author": "未知作者",
+        "source": "博集天卷书友会",
+        "link": "https://mp.weixin.qq.com/s/oilcS2PUR6pbx6SzotjJGw",
+        "pub_time": "Mon, 15 Sep 2025 16:33:59 +0000"
+      }
     }
   }
 }
