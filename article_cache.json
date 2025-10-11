@@ -235,48 +235,6 @@
         "pub_time": "Tue, 23 Sep 2025 16:32:23 +0000"
       }
     },
-    "https://mp.weixin.qq.com/s/9pZcuxnV6xnVyyoU_fGD9w": {
-      "timestamp": "2025-10-04 16:22:56",
-      "data": {
-        "title": "影单猫说我是个有梗的男人！",
-        "author": "未知作者",
-        "source": "书单来了",
-        "link": "https://mp.weixin.qq.com/s/9pZcuxnV6xnVyyoU_fGD9w",
-        "pub_time": "Fri, 26 Sep 2025 05:00:30 +0000"
-      },
-      "filter_reason": "fetch_failed"
-    },
-    "https://mp.weixin.qq.com/s/tToReN0WZS6L7EXwTmnm0Q": {
-      "timestamp": "2025-10-04 16:22:58",
-      "data": {
-        "title": "余华, 莫言......5位当代文坛大神的短篇小说集!",
-        "author": "未知作者",
-        "source": "书单来了",
-        "link": "https://mp.weixin.qq.com/s/tToReN0WZS6L7EXwTmnm0Q",
-        "pub_time": "Fri, 26 Sep 2025 05:00:30 +0000"
-      }
-    },
-    "https://mp.weixin.qq.com/s/04u4yvvagTfmzvQmBAeOxA": {
-      "timestamp": "2025-10-04 16:23:04",
-      "data": {
-        "title": "好消息！不用高价买了，这10本经典历史书复活了！",
-        "author": "未知作者",
-        "source": "广西师大出版社",
-        "link": "https://mp.weixin.qq.com/s/04u4yvvagTfmzvQmBAeOxA",
-        "pub_time": "Fri, 26 Sep 2025 04:56:08 +0000"
-      }
-    },
-    "https://mp.weixin.qq.com/s/b5kc-AAq6d6naFm29y58ow": {
-      "timestamp": "2025-10-04 16:23:14",
-      "data": {
-        "title": "新书推荐 | 广西壮族自治区科学技术情报研究所智库丛书",
-        "author": "未知作者",
-        "source": "广西师大出版社",
-        "link": "https://mp.weixin.qq.com/s/b5kc-AAq6d6naFm29y58ow",
-        "pub_time": "Fri, 26 Sep 2025 04:56:08 +0000"
-      },
-      "filter_reason": "fetch_failed"
-    },
     "https://mp.weixin.qq.com/s/n0SH4m6K1aJ-uL1xEyKroQ": {
       "timestamp": "2025-10-04 16:23:18",
       "data": {
@@ -2354,6 +2312,299 @@
         "pub_time": "Thu, 09 Oct 2025 16:29:01 +0000"
       },
       "filter_reason": "fetch_failed"
+    },
+    "https://mp.weixin.qq.com/s/yxWdjwDRZGrOwEYHs00rWw": {
+      "timestamp": "2025-10-11 16:23:21",
+      "data": {
+        "title": "关于电子书的10个真相",
+        "author": "未知作者",
+        "source": "中国出版传媒商报",
+        "link": "https://mp.weixin.qq.com/s/yxWdjwDRZGrOwEYHs00rWw",
+        "pub_time": "Sat, 11 Oct 2025 16:16:49 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/EKIaNrGKJ8zmd0HmW7o5eA": {
+      "timestamp": "2025-10-11 16:23:26",
+      "data": {
+        "title": "独家专访｜创始人金浩：钟书阁并不是一家“书店”",
+        "author": "未知作者",
+        "source": "中国出版传媒商报",
+        "link": "https://mp.weixin.qq.com/s/EKIaNrGKJ8zmd0HmW7o5eA",
+        "pub_time": "Sat, 11 Oct 2025 16:16:49 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/UBmH3g-z354bo-x2sUnn4Q": {
+      "timestamp": "2025-10-11 16:23:31",
+      "data": {
+        "title": "经典归来，朱刚教授代表作重磅再版！",
+        "author": "未知作者",
+        "source": "广西师大出版社",
+        "link": "https://mp.weixin.qq.com/s/UBmH3g-z354bo-x2sUnn4Q",
+        "pub_time": "Sat, 11 Oct 2025 10:53:38 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/6U9K00EtNpbDIOWUet9K1Q": {
+      "timestamp": "2025-10-11 16:23:38",
+      "data": {
+        "title": "我们为什么不爱了？",
+        "author": "未知作者",
+        "source": "理想国imaginist",
+        "link": "https://mp.weixin.qq.com/s/6U9K00EtNpbDIOWUet9K1Q",
+        "pub_time": "Sat, 11 Oct 2025 10:51:14 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/Q2PYgdcwZIA-p-07WgUvaw": {
+      "timestamp": "2025-10-11 16:23:42",
+      "data": {
+        "title": "理想盲盒 | “玄学”爱好者有福了，独家赠送人生答案笔记本",
+        "author": "未知作者",
+        "source": "理想国imaginist",
+        "link": "https://mp.weixin.qq.com/s/Q2PYgdcwZIA-p-07WgUvaw",
+        "pub_time": "Sat, 11 Oct 2025 10:51:14 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/ddB56KrIUuo_jvhhj6bk5w": {
+      "timestamp": "2025-10-11 16:23:47",
+      "data": {
+        "title": "一个旅顺、五位枭雄，半部中国近代史",
+        "author": "未知作者",
+        "source": "理想国imaginist",
+        "link": "https://mp.weixin.qq.com/s/ddB56KrIUuo_jvhhj6bk5w",
+        "pub_time": "Sat, 11 Oct 2025 10:51:14 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/q63Qcq0qC6gxIGwimW_MGg": {
+      "timestamp": "2025-10-11 16:23:53",
+      "data": {
+        "title": "如果你在深圳，喜欢小红书，喜欢逛书展",
+        "author": "未知作者",
+        "source": "做書",
+        "link": "https://mp.weixin.qq.com/s/q63Qcq0qC6gxIGwimW_MGg",
+        "pub_time": "Sat, 11 Oct 2025 10:41:18 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/Jd4ha5lcq4RyONjmjGJKmQ": {
+      "timestamp": "2025-10-11 16:23:58",
+      "data": {
+        "title": "又来深圳了！店员、志愿者招募",
+        "author": "未知作者",
+        "source": "做書",
+        "link": "https://mp.weixin.qq.com/s/Jd4ha5lcq4RyONjmjGJKmQ",
+        "pub_time": "Sat, 11 Oct 2025 10:41:18 +0000"
+      },
+      "filter_reason": "标题包含关键词: 招募"
+    },
+    "https://mp.weixin.qq.com/s/f4uMIWj6IhMlUfjVJyNL6g": {
+      "timestamp": "2025-10-11 16:24:03",
+      "data": {
+        "title": "出版民工的「午休歧视链」",
+        "author": "未知作者",
+        "source": "编客实验室",
+        "link": "https://mp.weixin.qq.com/s/f4uMIWj6IhMlUfjVJyNL6g",
+        "pub_time": "Sat, 11 Oct 2025 10:39:06 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/ejQ4aYd1ZKXXiFKQTU3ZSQ": {
+      "timestamp": "2025-10-11 16:24:07",
+      "data": {
+        "title": "不惑之年，这家社从文学高原走向文学高峰",
+        "author": "未知作者",
+        "source": "出版人杂志",
+        "link": "https://mp.weixin.qq.com/s/ejQ4aYd1ZKXXiFKQTU3ZSQ",
+        "pub_time": "Sat, 11 Oct 2025 10:29:46 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/4U_DNZc0MDudzADff6g48g": {
+      "timestamp": "2025-10-11 16:24:14",
+      "data": {
+        "title": "国图集团携中国出版界代表团首度亮相沙特利雅得国际书展，开展中沙文化交流活动",
+        "author": "未知作者",
+        "source": "出版人杂志",
+        "link": "https://mp.weixin.qq.com/s/4U_DNZc0MDudzADff6g48g",
+        "pub_time": "Sat, 11 Oct 2025 10:29:46 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/8-E3p2vcC0ey0etHwywMrQ": {
+      "timestamp": "2025-10-11 16:24:19",
+      "data": {
+        "title": "国图集团携中国出版界代表团在卡塔尔举办中国书刊海外发行及版权合作研讨会并开展文化交流活动",
+        "author": "未知作者",
+        "source": "出版人杂志",
+        "link": "https://mp.weixin.qq.com/s/8-E3p2vcC0ey0etHwywMrQ",
+        "pub_time": "Sat, 11 Oct 2025 10:29:46 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/Ykl7qBrwSLuTiCdJtkWaZA": {
+      "timestamp": "2025-10-11 16:24:25",
+      "data": {
+        "title": "出版社拒绝的“反市场”童书，如何卖爆1000万册？",
+        "author": "未知作者",
+        "source": "出版人杂志",
+        "link": "https://mp.weixin.qq.com/s/Ykl7qBrwSLuTiCdJtkWaZA",
+        "pub_time": "Sat, 11 Oct 2025 10:29:46 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/VTU5rX0a8sXJr80CeLa06A": {
+      "timestamp": "2025-10-11 16:24:29",
+      "data": {
+        "title": "美国近200年历史的图书批销商宣布停止运营",
+        "author": "未知作者",
+        "source": "出版人杂志",
+        "link": "https://mp.weixin.qq.com/s/VTU5rX0a8sXJr80CeLa06A",
+        "pub_time": "Sat, 11 Oct 2025 10:29:46 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/dLgUYi3MBUBJG_tFcqI6NA": {
+      "timestamp": "2025-10-11 16:24:36",
+      "data": {
+        "title": "从图书装帧到文创展陈，专业出版社的美编部门能干多少事儿？！",
+        "author": "未知作者",
+        "source": "出版商务周报",
+        "link": "https://mp.weixin.qq.com/s/dLgUYi3MBUBJG_tFcqI6NA",
+        "pub_time": "Sat, 11 Oct 2025 10:28:54 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/46B9x2yX5odN_sU-B3OBIA": {
+      "timestamp": "2025-10-11 16:24:41",
+      "data": {
+        "title": "他曾在上千名观众面前吃了一整只皮鞋",
+        "author": "未知作者",
+        "source": "新经典",
+        "link": "https://mp.weixin.qq.com/s/46B9x2yX5odN_sU-B3OBIA",
+        "pub_time": "Sat, 11 Oct 2025 10:27:04 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/INuPK8bfiDWQ93HlbtybPA": {
+      "timestamp": "2025-10-11 16:24:45",
+      "data": {
+        "title": "出版融合不是选修项！首场重点项目推广会干货满满",
+        "author": "未知作者",
+        "source": "中国出版传媒商报",
+        "link": "https://mp.weixin.qq.com/s/INuPK8bfiDWQ93HlbtybPA",
+        "pub_time": "Sat, 11 Oct 2025 10:21:43 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/2lrn5PnCjHims2pA-z0FcQ": {
+      "timestamp": "2025-10-11 16:24:53",
+      "data": {
+        "title": "他的画，为什么能让德拉克洛瓦、马奈、塞尚、毕加索等大师竞相模仿与致敬？",
+        "author": "未知作者",
+        "source": "后浪",
+        "link": "https://mp.weixin.qq.com/s/2lrn5PnCjHims2pA-z0FcQ",
+        "pub_time": "Sat, 11 Oct 2025 10:08:19 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/x8pmmCdfDYv0IUJn2y97fw": {
+      "timestamp": "2025-10-11 16:24:58",
+      "data": {
+        "title": "熬夜读完📖！原来他们是这样的历史人物🌟...",
+        "author": "未知作者",
+        "source": "清华大学出版社",
+        "link": "https://mp.weixin.qq.com/s/x8pmmCdfDYv0IUJn2y97fw",
+        "pub_time": "Sat, 11 Oct 2025 10:07:54 +0000"
+      },
+      "filter_reason": "fetch_failed"
+    },
+    "https://mp.weixin.qq.com/s/RqIAIekas4xyMNo-Yt8c9g": {
+      "timestamp": "2025-10-11 16:25:00",
+      "data": {
+        "title": "10月13日 | 何帆对话罗振宇：有大局观的牛人，都是什么样的？",
+        "author": "未知作者",
+        "source": "机械工业出版社",
+        "link": "https://mp.weixin.qq.com/s/RqIAIekas4xyMNo-Yt8c9g",
+        "pub_time": "Sat, 11 Oct 2025 10:05:36 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/E9omWdj2MxmNGD7V5eD9NA": {
+      "timestamp": "2025-10-11 16:25:07",
+      "data": {
+        "title": "70种美味汉堡制作🍔面包肉饼配菜酱料全讲清！",
+        "author": "未知作者",
+        "source": "机械工业出版社",
+        "link": "https://mp.weixin.qq.com/s/E9omWdj2MxmNGD7V5eD9NA",
+        "pub_time": "Sat, 11 Oct 2025 10:05:36 +0000"
+      },
+      "filter_reason": "fetch_failed"
+    },
+    "https://mp.weixin.qq.com/s/-UeIa5f2gD-F7c7DyUDSyA": {
+      "timestamp": "2025-10-11 16:25:10",
+      "data": {
+        "title": "大江健三郎：原子弹带来了异常极限状态",
+        "author": "未知作者",
+        "source": "三联书店三联书情",
+        "link": "https://mp.weixin.qq.com/s/-UeIa5f2gD-F7c7DyUDSyA",
+        "pub_time": "Sat, 11 Oct 2025 04:33:19 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/oeBS3L7dkYrAsZ6p12JOhQ": {
+      "timestamp": "2025-10-11 16:25:14",
+      "data": {
+        "title": "活动预告｜吴真x李丹婕：孤灯照书卷——郑振铎的文化抗战",
+        "author": "未知作者",
+        "source": "三联书店三联书情",
+        "link": "https://mp.weixin.qq.com/s/oeBS3L7dkYrAsZ6p12JOhQ",
+        "pub_time": "Sat, 11 Oct 2025 04:33:19 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/IEFT4mts3tJGR21QTHONVQ": {
+      "timestamp": "2025-10-11 16:25:21",
+      "data": {
+        "title": "人生必修课！一本书读懂中国式人际关系",
+        "author": "未知作者",
+        "source": "北京大学出版社",
+        "link": "https://mp.weixin.qq.com/s/IEFT4mts3tJGR21QTHONVQ",
+        "pub_time": "Sat, 11 Oct 2025 04:05:49 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/k0TmEgIQwJCNCigK1FJh9Q": {
+      "timestamp": "2025-10-11 16:25:28",
+      "data": {
+        "title": "北京活动｜许子东×黄子平×李洱：“觉醒者与彷徨客”",
+        "author": "未知作者",
+        "source": "北京大学出版社",
+        "link": "https://mp.weixin.qq.com/s/k0TmEgIQwJCNCigK1FJh9Q",
+        "pub_time": "Sat, 11 Oct 2025 04:05:49 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/gFcfG8-XzoH2mzLbLbGv9w": {
+      "timestamp": "2025-10-11 16:25:33",
+      "data": {
+        "title": "全系列发货破60万册！“祝勇故宫系列”畅销历程盘点",
+        "author": "未知作者",
+        "source": "编客实验室",
+        "link": "https://mp.weixin.qq.com/s/gFcfG8-XzoH2mzLbLbGv9w",
+        "pub_time": "Fri, 10 Oct 2025 16:53:12 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/2x1zP9Y2w46WEjNMtCtn4g": {
+      "timestamp": "2025-10-11 16:25:38",
+      "data": {
+        "title": "故宫博物院100周年，热门书销量大盘点！",
+        "author": "未知作者",
+        "source": "编客实验室",
+        "link": "https://mp.weixin.qq.com/s/2x1zP9Y2w46WEjNMtCtn4g",
+        "pub_time": "Fri, 10 Oct 2025 16:53:12 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/STE0mOxuKuRXTuj4G5Ol0Q": {
+      "timestamp": "2025-10-11 16:25:44",
+      "data": {
+        "title": "诺奖授予匈牙利作家拉斯洛，中文读者因译林社与其“早相识”",
+        "author": "未知作者",
+        "source": "凤凰出版传媒集团",
+        "link": "https://mp.weixin.qq.com/s/STE0mOxuKuRXTuj4G5Ol0Q",
+        "pub_time": "Fri, 10 Oct 2025 16:37:28 +0000"
+      }
+    },
+    "https://mp.weixin.qq.com/s/hZ9jCCuSjMGNYLpk5ktZpw": {
+      "timestamp": "2025-10-11 16:25:51",
+      "data": {
+        "title": "除了2025诺贝尔文学奖得主，译林出版社还有这些宝藏诺奖作家！",
+        "author": "未知作者",
+        "source": "凤凰出版传媒集团",
+        "link": "https://mp.weixin.qq.com/s/hZ9jCCuSjMGNYLpk5ktZpw",
+        "pub_time": "Fri, 10 Oct 2025 16:37:28 +0000"
+      }
     }
   }
 }
