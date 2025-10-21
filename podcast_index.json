@@ -1,6 +1,14 @@
 {
   "podcasts": [
     {
+      "id": "20251021_163140",
+      "date": "2025-10-21",
+      "title": "出版电台播报 2025年10月21日",
+      "transcript_path": "./podcasts/20251021_163140/summary.html",
+      "audio_path": "./podcasts/20251021_163140/podcast.mp3",
+      "highlight": "您好，今天为您准备了29篇出版行业的新鲜资讯，请您查收。"
+    },
+    {
       "id": "20251020_164059",
       "date": "2025-10-20",
       "title": "出版电台播报 2025年10月20日",
@@ -390,14 +398,6 @@
       "highlight": "经典文学如何借国漫东风再起？",
       "audio_path": "./podcasts/20250227_130356/podcast.mp3",
       "script_path": "./podcasts/20250227_130356/summary.txt"
-    },
-    {
-      "id": "20250227_120912",
-      "date": "2025-02-27",
-      "title": "出版电台播报 2025年02月27日",
-      "highlight": "你提问的方式，将影响你的一生？",
-      "audio_path": "./podcasts/20250227_120912/podcast.mp3",
-      "script_path": "./podcasts/20250227_120912/summary.txt"
     }
   ]
 }
