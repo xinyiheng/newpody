@@ -1,6 +1,14 @@
 {
   "podcasts": [
     {
+      "id": "20251029_163511",
+      "date": "2025-10-29",
+      "title": "出版电台播报 2025年10月29日",
+      "transcript_path": "./podcasts/20251029_163511/summary.html",
+      "audio_path": "./podcasts/20251029_163511/podcast.mp3",
+      "highlight": "您好，今天为您准备了39篇出版行业的新鲜资讯，请您查收。"
+    },
+    {
       "id": "20251028_163133",
       "date": "2025-10-28",
       "title": "出版电台播报 2025年10月28日",
@@ -390,14 +398,6 @@
       "highlight": "发现真问题，锁定畅销书，探寻女性视角",
       "audio_path": "./podcasts/20250227_222255/podcast.mp3",
       "script_path": "./podcasts/20250227_222255/summary.txt"
-    },
-    {
-      "id": "20250227_141928",
-      "date": "2025-02-27",
-      "title": "出版电台播报 2025年02月27日",
-      "highlight": "Marvel与DC跨界合作，新时代来临？",
-      "audio_path": "./podcasts/20250227_141928/podcast.mp3",
-      "script_path": "./podcasts/20250227_141928/summary.txt"
     }
   ]
 }
