@@ -1,6 +1,14 @@
 {
   "podcasts": [
     {
+      "id": "20251030_163250",
+      "date": "2025-10-30",
+      "title": "出版电台播报 2025年10月30日",
+      "transcript_path": "./podcasts/20251030_163250/summary.html",
+      "audio_path": "./podcasts/20251030_163250/podcast.mp3",
+      "highlight": "您好，今天为您准备了29篇出版行业的新鲜资讯，请您查收。"
+    },
+    {
       "id": "20251029_163511",
       "date": "2025-10-29",
       "title": "出版电台播报 2025年10月29日",
@@ -390,14 +398,6 @@
       "highlight": "18本狠人猛读书单，你读过几本？",
       "audio_path": "./podcasts/20250227_232159/podcast.mp3",
       "script_path": "./podcasts/20250227_232159/summary.txt"
-    },
-    {
-      "id": "20250227_222255",
-      "date": "2025-02-27",
-      "title": "出版电台播报 2025年02月27日",
-      "highlight": "发现真问题，锁定畅销书，探寻女性视角",
-      "audio_path": "./podcasts/20250227_222255/podcast.mp3",
-      "script_path": "./podcasts/20250227_222255/summary.txt"
     }
   ]
 }
