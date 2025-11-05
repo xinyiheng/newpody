@@ -1,6 +1,14 @@
 {
   "podcasts": [
     {
+      "id": "20251105_163744",
+      "date": "2025-11-05",
+      "title": "出版电台播报 2025年11月05日",
+      "transcript_path": "./podcasts/20251105_163744/summary.html",
+      "audio_path": "./podcasts/20251105_163744/podcast.mp3",
+      "highlight": "您好，今天为您准备了57篇出版行业的新鲜资讯，请您查收。"
+    },
+    {
       "id": "20251030_163250",
       "date": "2025-10-30",
       "title": "出版电台播报 2025年10月30日",
@@ -390,14 +398,6 @@
       "title": "出版电台播报 2025年02月28日",
       "transcript_path": "./podcasts/20250228_132716/summary.txt",
       "audio_path": "./podcasts/20250228_132716/podcast.mp3"
-    },
-    {
-      "id": "20250227_232159",
-      "date": "2025-02-27",
-      "title": "出版电台播报 2025年02月27日",
-      "highlight": "18本狠人猛读书单，你读过几本？",
-      "audio_path": "./podcasts/20250227_232159/podcast.mp3",
-      "script_path": "./podcasts/20250227_232159/summary.txt"
     }
   ]
 }
