@@ -1,6 +1,14 @@
 {
   "podcasts": [
     {
+      "id": "20260126_164143",
+      "date": "2026-01-26",
+      "title": "出版电台播报 2026年01月26日",
+      "transcript_path": "./podcasts/20260126_164143/summary.html",
+      "audio_path": "./podcasts/20260126_164143/podcast.mp3",
+      "highlight": "您好，今天为您准备了57篇出版行业的新鲜资讯，请您查收。"
+    },
+    {
       "id": "20260121_165036",
       "date": "2026-01-21",
       "title": "出版电台播报 2026年01月21日",
@@ -391,14 +399,6 @@
       "transcript_path": "./podcasts/20250925_162854/summary.html",
       "audio_path": "./podcasts/20250925_162854/podcast.mp3",
       "highlight": "您好，今天为您准备了31篇出版行业的新鲜资讯，请您查收。"
-    },
-    {
-      "id": "20250924_162856",
-      "date": "2025-09-24",
-      "title": "出版电台播报 2025年09月24日",
-      "transcript_path": "./podcasts/20250924_162856/summary.html",
-      "audio_path": "./podcasts/20250924_162856/podcast.mp3",
-      "highlight": "您好，今天为您准备了26篇出版行业的新鲜资讯，请您查收。"
     }
   ]
 }
