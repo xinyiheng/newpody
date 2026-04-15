@@ -25,7 +25,7 @@ class ServeTTSRequest(BaseModel):
 
 class PodcastGenerator:
     def __init__(self):
-        self.rss_url = "https://www.inoreader.com/stream/user/1003916593/tag/%E5%9B%BD%E5%86%85%E5%87%BA%E7%89%88"
+        self.rss_url = "https://supsub.net/feed/f4caffa2-d32a-431f-b987-c42b239a29ec/groups/837/rss"
         # 从环境变量获取 API key
         self.api_key = os.environ.get('API_KEY')
         if not self.api_key:
@@ -363,10 +363,8 @@ class PodcastGenerator:
                 except:
                     continue
                     
-            # 修改分页逻辑
             page_urls = [
-                f"{self.rss_url}&n=100",  # 直接获取100篇
-                f"{self.rss_url}?n=100",  # 备用格式
+                self.rss_url,
             ]
             
             for page_url in page_urls:
